@@ -1,0 +1,326 @@
+{
+  "schemaVersion": 1,
+  "mode": "retained-test-view-images",
+  "description": "公开TUM2TWIN建筑测试视角的参考照片与已完成训练的渲染结果。按已有对比板提取，不代表连续三维浏览。",
+  "selectionMethod": "每栋使用已归档的固定深度与CW-DepthGS差值最好、中位和最差测试视角；界面按视角编号显示。",
+  "buildings": [
+    {
+      "id": "4906981",
+      "name": "建筑 4906981",
+      "source": "公开TUM2TWIN建筑数据；参考照片和CW-DepthGS渲染提取自已归档测试视角对比图。",
+      "sceneId": "building_4906981",
+      "trainingViews": 24,
+      "iterations": 7000,
+      "views": [
+        {
+          "id": "00000",
+          "label": "测试视角 00000",
+          "reference": "assets/cases/4906981/00000-reference.png",
+          "render": "assets/cases/4906981/00000-render.png",
+          "width": 480,
+          "height": 347,
+          "provenance": {
+            "sourcePanel": "building_4906981_best_delta_00000.png",
+            "sourcePanelSha256": "f4ea5b3725a2ef23720916bcd4d5014de09a4e08176df7bd302c275d9241e172",
+            "sourcePanelSize": [
+              2432,
+              389
+            ],
+            "cropBoxesXYXY": {
+              "reference": [
+                0,
+                42,
+                480,
+                389
+              ],
+              "render": [
+                976,
+                42,
+                1456,
+                389
+              ]
+            },
+            "selection": "best_delta",
+            "transform": "Lossless extraction of columns 1 and 3; remove 42 px title strip; no resizing."
+          }
+        },
+        {
+          "id": "00007",
+          "label": "测试视角 00007",
+          "reference": "assets/cases/4906981/00007-reference.png",
+          "render": "assets/cases/4906981/00007-render.png",
+          "width": 480,
+          "height": 347,
+          "provenance": {
+            "sourcePanel": "building_4906981_median_delta_00007.png",
+            "sourcePanelSha256": "9e6d19db58789f2b5369581d3b7f5269fc87ee4ff3e9120e91e5acd0023f93f1",
+            "sourcePanelSize": [
+              2432,
+              389
+            ],
+            "cropBoxesXYXY": {
+              "reference": [
+                0,
+                42,
+                480,
+                389
+              ],
+              "render": [
+                976,
+                42,
+                1456,
+                389
+              ]
+            },
+            "selection": "median_delta",
+            "transform": "Lossless extraction of columns 1 and 3; remove 42 px title strip; no resizing."
+          }
+        },
+        {
+          "id": "00012",
+          "label": "测试视角 00012",
+          "reference": "assets/cases/4906981/00012-reference.png",
+          "render": "assets/cases/4906981/00012-render.png",
+          "width": 480,
+          "height": 347,
+          "provenance": {
+            "sourcePanel": "building_4906981_worst_delta_00012.png",
+            "sourcePanelSha256": "6446fcc3f622e70a6e86b0ba7f95780bc78f0aa1d18b7701475cd89988a3bb32",
+            "sourcePanelSize": [
+              2432,
+              389
+            ],
+            "cropBoxesXYXY": {
+              "reference": [
+                0,
+                42,
+                480,
+                389
+              ],
+              "render": [
+                976,
+                42,
+                1456,
+                389
+              ]
+            },
+            "selection": "worst_delta",
+            "transform": "Lossless extraction of columns 1 and 3; remove 42 px title strip; no resizing."
+          }
+        }
+      ]
+    },
+    {
+      "id": "4959323",
+      "name": "建筑 4959323",
+      "source": "公开TUM2TWIN建筑数据；参考照片和CW-DepthGS渲染提取自已归档测试视角对比图。",
+      "sceneId": "building_4959323",
+      "trainingViews": 24,
+      "iterations": 7000,
+      "views": [
+        {
+          "id": "00007",
+          "label": "测试视角 00007",
+          "reference": "assets/cases/4959323/00007-reference.png",
+          "render": "assets/cases/4959323/00007-render.png",
+          "width": 480,
+          "height": 347,
+          "provenance": {
+            "sourcePanel": "building_4959323_worst_delta_00007.png",
+            "sourcePanelSha256": "771ef62fb3068ba2dfdf5c018622fbe040e10df957a967f0f8ed56010f226c27",
+            "sourcePanelSize": [
+              2432,
+              389
+            ],
+            "cropBoxesXYXY": {
+              "reference": [
+                0,
+                42,
+                480,
+                389
+              ],
+              "render": [
+                976,
+                42,
+                1456,
+                389
+              ]
+            },
+            "selection": "worst_delta",
+            "transform": "Lossless extraction of columns 1 and 3; remove 42 px title strip; no resizing."
+          }
+        },
+        {
+          "id": "00008",
+          "label": "测试视角 00008",
+          "reference": "assets/cases/4959323/00008-reference.png",
+          "render": "assets/cases/4959323/00008-render.png",
+          "width": 480,
+          "height": 347,
+          "provenance": {
+            "sourcePanel": "building_4959323_median_delta_00008.png",
+            "sourcePanelSha256": "a0105d184a086d2d935e57e60f4af233475ebe00cde79b0d37b4358e5006c47a",
+            "sourcePanelSize": [
+              2432,
+              389
+            ],
+            "cropBoxesXYXY": {
+              "reference": [
+                0,
+                42,
+                480,
+                389
+              ],
+              "render": [
+                976,
+                42,
+                1456,
+                389
+              ]
+            },
+            "selection": "median_delta",
+            "transform": "Lossless extraction of columns 1 and 3; remove 42 px title strip; no resizing."
+          }
+        },
+        {
+          "id": "00010",
+          "label": "测试视角 00010",
+          "reference": "assets/cases/4959323/00010-reference.png",
+          "render": "assets/cases/4959323/00010-render.png",
+          "width": 480,
+          "height": 347,
+          "provenance": {
+            "sourcePanel": "building_4959323_best_delta_00010.png",
+            "sourcePanelSha256": "53401c2baf655eb21cdd0a1e6a97f25f03979956464f2b11c5fd400ab7d00044",
+            "sourcePanelSize": [
+              2432,
+              389
+            ],
+            "cropBoxesXYXY": {
+              "reference": [
+                0,
+                42,
+                480,
+                389
+              ],
+              "render": [
+                976,
+                42,
+                1456,
+                389
+              ]
+            },
+            "selection": "best_delta",
+            "transform": "Lossless extraction of columns 1 and 3; remove 42 px title strip; no resizing."
+          }
+        }
+      ]
+    },
+    {
+      "id": "pilot",
+      "name": "建筑 pilot",
+      "source": "公开TUM2TWIN建筑数据；参考照片和CW-DepthGS渲染提取自已归档测试视角对比图。",
+      "sceneId": "pilot_building_01",
+      "trainingViews": 24,
+      "iterations": 7000,
+      "views": [
+        {
+          "id": "00006",
+          "label": "测试视角 00006",
+          "reference": "assets/cases/pilot/00006-reference.png",
+          "render": "assets/cases/pilot/00006-render.png",
+          "width": 480,
+          "height": 348,
+          "provenance": {
+            "sourcePanel": "pilot_building_01_median_delta_00006.png",
+            "sourcePanelSha256": "2f6c9b429bd54fec35d015bd4c7c83777980f1c9589a0f9acd48304a3afd0623",
+            "sourcePanelSize": [
+              2432,
+              390
+            ],
+            "cropBoxesXYXY": {
+              "reference": [
+                0,
+                42,
+                480,
+                390
+              ],
+              "render": [
+                976,
+                42,
+                1456,
+                390
+              ]
+            },
+            "selection": "median_delta",
+            "transform": "Lossless extraction of columns 1 and 3; remove 42 px title strip; no resizing."
+          }
+        },
+        {
+          "id": "00007",
+          "label": "测试视角 00007",
+          "reference": "assets/cases/pilot/00007-reference.png",
+          "render": "assets/cases/pilot/00007-render.png",
+          "width": 480,
+          "height": 348,
+          "provenance": {
+            "sourcePanel": "pilot_building_01_worst_delta_00007.png",
+            "sourcePanelSha256": "64b1d07f38c1c9ba0ea0c0eb745a33ae9de729b026ed3e4427a5db5f8d498db6",
+            "sourcePanelSize": [
+              2432,
+              390
+            ],
+            "cropBoxesXYXY": {
+              "reference": [
+                0,
+                42,
+                480,
+                390
+              ],
+              "render": [
+                976,
+                42,
+                1456,
+                390
+              ]
+            },
+            "selection": "worst_delta",
+            "transform": "Lossless extraction of columns 1 and 3; remove 42 px title strip; no resizing."
+          }
+        },
+        {
+          "id": "00012",
+          "label": "测试视角 00012",
+          "reference": "assets/cases/pilot/00012-reference.png",
+          "render": "assets/cases/pilot/00012-render.png",
+          "width": 480,
+          "height": 348,
+          "provenance": {
+            "sourcePanel": "pilot_building_01_best_delta_00012.png",
+            "sourcePanelSha256": "9cbfffe845e2c230f9ae0c29afc90cdb609bdad3f01c58013162c3dc983db782",
+            "sourcePanelSize": [
+              2432,
+              390
+            ],
+            "cropBoxesXYXY": {
+              "reference": [
+                0,
+                42,
+                480,
+                390
+              ],
+              "render": [
+                976,
+                42,
+                1456,
+                390
+              ]
+            },
+            "selection": "best_delta",
+            "transform": "Lossless extraction of columns 1 and 3; remove 42 px title strip; no resizing."
+          }
+        }
+      ]
+    }
+  ]
+}
