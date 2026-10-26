@@ -1,0 +1,47 @@
+{
+  "building": "4906981",
+  "format": "splat-32-byte",
+  "displayOnly": true,
+  "sourceModel": "formal_building_4906981_localmv_s0/point_cloud/iteration_7000/point_cloud.ply",
+  "sourceBytes": 839038604,
+  "sourceSha256": "57933817bdb13f6bdcfe5277a615b8e6cb6498ae50240813be732563bb99bb46",
+  "sourceGaussians": 3383214,
+  "retainedGaussians": 800000,
+  "outputBytes": 25600000,
+  "outputSha256": "80d56db6004a4450e31742703642b8f7d8e5d45b57ed8a7ed377dfcfba651ed9",
+  "algorithm": {
+    "finitePositiveScaleAndRotationFilter": true,
+    "minimumOpacity": 0.05,
+    "maximumScaleQuantile": 0.995,
+    "maximumScaleThreshold": 0.11400075256824493,
+    "eligibleGaussians": 2074458,
+    "ranking": "opacity * second_largest_scale * largest_scale",
+    "selection": "Top scores, stable sort; no new or interpolated Gaussians",
+    "color": "RGB = clip(0.5 + 0.28209479177387814 * f_dc, 0, 1), 8-bit; higher SH terms discarded",
+    "rotation": "Normalized quaternion [w,x,y,z], encoded uint8(q*128+128)",
+    "opacity": "uint8(255 * sigmoid(source_opacity))",
+    "scale": "float32(exp(source_log_scale))"
+  },
+  "note": "展示精简版，不代表完整模型的定量实验效果；未重新训练。",
+  "initialView": {
+    "position": [
+      -2.1528259800822354,
+      1.0572940910752338,
+      1.0867280770704328
+    ],
+    "target": [
+      0.20629675140551917,
+      0.4966654834993425,
+      3.715455428065381
+    ],
+    "up": [
+      0.7104864059578205,
+      -0.18885604886879911,
+      -0.6778956112520607
+    ],
+    "fov": 58.016875282077656,
+    "sourceCameraId": 28,
+    "sourceImage": "DJI_20241217094538_0025_D.JPG",
+    "derivation": "COLMAP camera-to-world rotation: forward=column2, up=-column1; target distance projected from retained-point median"
+  }
+}
