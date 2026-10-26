@@ -1,0 +1,72 @@
+{
+  "building": "4906981",
+  "format": "GaussianSplats3D KSplat 0.1",
+  "displayOnly": true,
+  "sourceModel": "formal_building_4906981_localmv_s0/point_cloud/iteration_7000/point_cloud.ply",
+  "sourceBytes": 839038604,
+  "sourceSha256": "57933817bdb13f6bdcfe5277a615b8e6cb6498ae50240813be732563bb99bb46",
+  "sourceGaussians": 3383214,
+  "retainedGaussians": 3383214,
+  "outputBytes": 81375332,
+  "outputSha256": "2287bcfe340581328a828b340238210a28d2406dde09ace1ab9f0ede5adf32fe",
+  "libraryVersion": "0.4.7",
+  "compressionLevel": 2,
+  "sourceSHDegree": 3,
+  "outputSHDegree": 0,
+  "alphaRemovalThreshold": 0,
+  "chunkSize": 250000,
+  "sectionCount": 14,
+  "sectionCounts": [
+    250000,
+    250000,
+    250000,
+    250000,
+    250000,
+    250000,
+    250000,
+    250000,
+    250000,
+    250000,
+    250000,
+    250000,
+    250000,
+    133214
+  ],
+  "algorithm": {
+    "selection": "All source Gaussians retained; no size or opacity ranking",
+    "position": "Bucket-relative uint16",
+    "scaleAndRotation": "float16",
+    "colorAndOpacity": "RGBA8, SH0/DC color only",
+    "bucketBlockSize": 5,
+    "bucketSize": 256
+  },
+  "validation": {
+    "decodedGaussians": 3383214,
+    "allDecodedValuesFinite": true,
+    "zeroScaleComponents": 170,
+    "totalScaleComponents": 10149642,
+    "allZeroScaleGaussians": 0
+  },
+  "note": "保留全部高斯点的网页转换版；几何经过量化，颜色使用SH0。未重新训练，正式实验指标仍对应原始模型。",
+  "initialView": {
+    "position": [
+      -2.1528259800822354,
+      1.0572940910752338,
+      1.0867280770704328
+    ],
+    "target": [
+      0.20629675140551917,
+      0.4966654834993425,
+      3.715455428065381
+    ],
+    "up": [
+      0.7104864059578205,
+      -0.18885604886879911,
+      -0.6778956112520607
+    ],
+    "fov": 58.016875282077656,
+    "sourceCameraId": 28,
+    "sourceImage": "DJI_20241217094538_0025_D.JPG",
+    "derivation": "COLMAP camera-to-world rotation: forward=column2, up=-column1; target distance projected from retained-point median"
+  }
+}
