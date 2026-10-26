@@ -13,5 +13,5 @@
 .research-table th:first-child{text-align:left;white-space:normal;min-width:165px}
 .research-table thead th{color:var(--text);font-weight:600;background:var(--surface-2)}
 .research-table tbody th{font-weight:400}.research-table tbody tr:hover{background:var(--surface)}
-.research-table td{color:#d1d7d5}
+.research-table td{color:var(--text)}
 @media(max-width:640px){.site-nav{padding-inline:16px;gap:16px}.site-nav nav{overflow-x:auto;gap:18px;min-width:0}.site-nav .wordmark{flex-shrink:0}.research-table table{font-size:13px}.research-prose h3{font-size:20px}}
