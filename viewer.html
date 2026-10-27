@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="在浏览器中连续旋转、缩放已训练的三维高斯模型。支持本地SPLAT文件，无需上传。">
+  <meta name="description" content="在浏览器中连续旋转、缩放已训练的三维高斯模型。本地SPLAT文件直接在浏览器中读取。">
   <title>三维模型浏览 · CW-DepthGS</title>
   <link rel="stylesheet" href="application.css?v=20261027-layout"><link rel="stylesheet" href="viewer.css?v=20261026-full">
 <link rel="icon" type="image/png" href="assets/cases/4906981/00007-render.png"></head>
@@ -13,7 +13,7 @@
     <h1>三维模型浏览</h1>
     <p>打开建筑4906981的重建模型，观察屋顶与立面。拖动旋转，滚轮缩放，右键拖动平移；触屏可用单指旋转、双指缩放。</p>
     <div class="model-demo-row"><button type="button" id="model-demo">打开完整点数版（81.4 MB）</button> <button type="button" id="model-light" class="secondary">低内存版（25.6 MB）</button><p>默认入口保留原模型的3,383,214个高斯点，减少精简造成的细节损失。文件点击后才下载；设备内存不足时可使用80万点预览。</p></div>
-    <div class="model-file-row"><label for="model-file">或选择本地 .splat 模型</label><input id="model-file" type="file" accept=".splat"><span>每个文件不超过100 MB，仅在当前浏览器中读取。</span></div>
+    <div class="model-file-row"><label for="model-file">或选择本地 .splat 模型</label><input id="model-file" type="file" accept=".splat"><span>浏览器直接读取100 MB以内的本地文件。</span></div>
     <p id="model-status" role="status" aria-live="polite">可打开建筑展示模型，或选择自己的模型文件。</p>
     <div id="model-view" class="model-view" aria-label="三维高斯模型浏览区域"><div class="model-empty">模型加载后，可在这里旋转和缩放。</div></div>
     <div class="model-actions" aria-label="模型操作"><button type="button" id="model-reset" disabled>恢复初始视角</button><button type="button" id="model-left" disabled>向左旋转</button><button type="button" id="model-right" disabled>向右旋转</button><button type="button" id="model-near" disabled>放大</button><button type="button" id="model-far" disabled>缩小</button><button type="button" id="model-flip" disabled>翻转竖直方向</button><button type="button" id="model-close" disabled>关闭模型</button></div>
