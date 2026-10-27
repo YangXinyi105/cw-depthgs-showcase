@@ -70,4 +70,5 @@ python -m http.server 8765 --bind 127.0.0.1
 - `vendor/`：固定版本的浏览器依赖与许可证。
 - `assets/cases/`：公开演示图像与来源清单。
 - `research.html` / `styles.css` / `app.js`：研究展示。
-- `assets/technical-report.pdf`：技术报告。
+- `assets/technical-report-20261027.pdf`：2026-10-27 Web应用版技术报告，补充建档流程、系统架构、权限、部署与软件验收。
+- `assets/technical-report.pdf`：同一新版报告的兼容入口。
