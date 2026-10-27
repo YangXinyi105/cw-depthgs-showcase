@@ -124,7 +124,7 @@
   }
   function updateList() {
     ui.list.replaceChildren(); ui.count.textContent='当前视角 '+notes.length+' 条人工标注';
-    if (!notes.length) ui.list.append(el('p','尚无标注。点击渲染图，或使用“在中心添加标注”按钮。',{class:'ws-empty'}));
+    if (!notes.length) ui.list.append(el('li','尚无标注。点击渲染图，或使用“在中心添加标注”按钮。',{class:'ws-empty'}));
     notes.forEach((n,i)=>{
       const row=el('li',null,{class:'ws-note-row'});
       row.append(button('标注 '+(i+1),()=>{selected=n.id;updateList();ui.note.focus();},'ws-note-select'));
