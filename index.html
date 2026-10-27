@@ -7,20 +7,20 @@
 <link rel="stylesheet" href="application.css?v=20261027-layout"><link rel="stylesheet" href="workspace.css">
 <link rel="icon" type="image/png" href="assets/cases/4906981/00007-render.png"></head>
 <body>
-<a class="skip" href="#workspace">跳到复核工具</a>
-<header class="app-header"><a class="brand" href="index.html"><span>CW</span> DepthGS</a><nav aria-label="主导航"><a href="index.html" aria-current="page">首页</a><a href="viewer.html">三维浏览</a><a href="index.html#workspace">复核工具</a><a href="archive.html">项目档案</a><a href="research.html">研究结果</a></nav></header>
+<a class="skip" href="#top">跳到主要内容</a>
+<header class="app-header"><a class="brand" href="index.html"><span>CW</span> DepthGS</a><nav aria-label="主导航"><a href="index.html" aria-current="page">首页</a><a href="viewer.html">三维浏览</a><a href="archive.html">项目与复核</a><a href="research.html">研究结果</a></nav></header>
 <main id="top">
 <section class="app-intro" aria-labelledby="intro-title">
- <div><p class="eyebrow">既有建筑数字化建档</p><h1 id="intro-title">稀疏视角建筑重建<br>与可视化复核</h1><p class="intro-copy">用有限影像重建建筑外观，将照片与复核记录归入项目档案，为远程查看和资料交接提供依据。</p><div class="intro-actions"><a class="primary-link" href="viewer.html">三维浏览</a><a class="secondary-link" href="archive.html">项目档案</a></div></div>
+ <div><p class="eyebrow">既有建筑数字化建档</p><h1 id="intro-title">稀疏视角建筑重建<br>与可视化复核</h1><p class="intro-copy">用有限影像重建建筑外观，将照片与复核记录归入项目档案，为远程查看和资料交接提供依据。</p><div class="intro-actions"><a class="primary-link" href="viewer.html">三维浏览</a><a class="secondary-link" href="archive.html">项目与复核</a></div></div>
  <figure><img src="assets/cases/4906981/00007-render.png" alt="建筑4906981的重建渲染，独立测试视角00007" width="480" height="347" fetchpriority="high"><figcaption>建筑4906981 · 测试视角重建结果</figcaption></figure>
 </section>
 <section class="project-facts" aria-label="实验规模"><dl><div><dt>24<span>张</span></dt><dd>每栋建筑的训练图像</dd></div><div><dt>3<span>栋</span></dt><dd>公开数据集建筑</dd></div><div><dt>27<span>次</span></dt><dd>固定划分的正式训练</dd></div></dl><a href="research.html#design">查看实验设计</a></section>
 <section id="workflow" class="workflow" aria-labelledby="workflow-title"><h2 id="workflow-title">稀疏采集、智能重建与复核交付</h2><p class="section-lead">系统把24视角采集、GPU离线重建和Web复核连接为同一条可追踪流程；复核发现问题后，可继续补拍或生成新模型版本。</p><ol><li><span class="step-number">01</span><h3>建立采集任务</h3><p>按建筑建立24视角采集批次，记录地点、负责人和现场限制。</p></li><li><span class="step-number">02</span><h3>检查输入资料</h3><p>上传照片并检查数量、分辨率、亮度、清晰度和重复文件。</p></li><li><span class="step-number">03</span><h3>离线智能重建</h3><p>导出任务包，在GPU环境运行CW-DepthGS，再导入模型与指标。</p></li><li><span class="step-number">04</span><h3>复核与处置</h3><p>对照片和模型进行复核，将问题标记为补拍、重建或已解决。</p></li><li><span class="step-number">05</span><h3>验收与交付</h3><p>保存验收结论和模型版本，通过只读链接完成成果交接。</p></li></ol></section>
 <section class="archive-entry" aria-labelledby="archive-entry-title"><div><h2 id="archive-entry-title">按建筑追踪完整项目流程</h2><p>项目档案统一保存采集批次、原始照片、重建任务、模型版本、质量指标和验收记录。每次补拍与重新重建都可回溯到对应版本。</p><a class="primary-link" href="archive.html">进入项目档案</a></div><dl class="archive-capabilities"><div><dt>采集管理</dt><dd>检查24视角任务进度，导出带清单的重建任务包。</dd></div><div><dt>版本关联</dt><dd>登记模型、指标、配置、硬件信息和文件校验值。</dd></div><div><dt>复核交付</dt><dd>跟踪问题处理与验收状态，并提供只读交接链接。</dd></div></dl></section>
 <section class="research-entry" aria-labelledby="research-entry-title"><h2 id="research-entry-title">重建方法与实验结果</h2><p class="section-lead">CW-DepthGS将稠密单目深度与稀疏几何监督分别建模，结合鲁棒损失和跨视角约束。三栋建筑的多随机种子实验中，PSNR相对RGB-only均有提升。</p><div class="research-links"><a href="research.html#method"><strong>方法框架</strong><span>深度监督与几何约束</span></a><a href="research.html#ablation"><strong>模块消融</strong><span>7组配置逐项比较</span></a><a href="research.html#results"><strong>三建筑验证</strong><span>配对统计与定性对比</span></a><a href="assets/technical-report-20261027.pdf" target="_blank" rel="noopener"><strong>技术报告</strong><span>Web应用版 · PDF</span></a></div></section>
-<section id="workspace" class="tool-section" aria-labelledby="workspace-title"><div class="tool-heading"><h2 id="workspace-title">照片对照与人工复核</h2><p>选择公开案例，对照原始照片与测试视角渲染；也可导入自己的照片，记录待复核的位置。</p></div><div id="workspace-root"><p role="status">正在加载建筑案例…</p></div><noscript>请启用JavaScript以使用标注与导出。研究说明仍可直接阅读。</noscript></section>
+
 <section class="data-note" aria-label="案例来源"><h2>案例来源与使用范围</h2><p>公开案例来自TUM2TWIN数据集。三维模型由离线训练生成；上传现场照片用于建档与人工复核，新增建筑重建需另行运行训练流程。</p></section>
 </main><footer><span>CW-DepthGS · 建筑三维建档与复核</span><a href="assets/technical-report-20261027.pdf" target="_blank" rel="noopener">技术报告 PDF</a></footer>
 <script>if(['method','design','ablation','calibration','results','evidence'].includes(location.hash.slice(1)))location.replace('research.html'+location.hash);</script>
-<script type="module" src="workspace.js?v=20261027-layout2"></script>
+<script>if(location.hash==="#workspace")location.replace("archive.html");</script>
 </body></html>
