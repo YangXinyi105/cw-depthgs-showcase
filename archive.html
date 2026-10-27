@@ -49,10 +49,11 @@
   <div class="archive-actions edit-only"><button id="save-notes" type="button">保存标注到服务器</button><button id="download-draft" type="button">下载本次草稿</button><span id="dirty-state" role="status">无未保存修改</span></div>
    <form id="acceptance-form" class="archive-form edit-only"><label>验收状态<select id="acceptance-status"><option>待复核</option><option>处理中</option><option>已解决</option><option>已验收</option></select></label><label class="wide">验收结论<textarea id="acceptance-summary" rows="3" maxlength="2000" placeholder="记录本版本是否通过，或需要补拍、重新重建的范围"></textarea></label><button type="submit">保存验收结论</button></form>
    <div id="acceptance-readonly" class="acceptance-readonly"></div>
+   <div class="analysis-panel"><div class="archive-actions"><button id="run-analysis" class="edit-only" type="button">生成AI项目分析</button><span class="minor">仅发送项目结构化数据，不上传原始照片。</span></div><div id="analysis-result" class="analysis-result" hidden></div></div>
   </section>
   <details><summary>修改记录</summary><p class="minor">记录人由项目成员填写；服务器记录操作时间和版本。</p><ol id="project-history" class="project-history"></ol></details>
  </section>
 </main>
 <footer><span>CW-DepthGS · 建筑项目档案</span><a href="index.html">返回展示首页</a></footer>
-<script src="service-config.js?v=20261027-tencent"></script><script type="module" src="archive.js?v=20261027-closed-loop"></script>
+<script src="service-config.js?v=20261027-tencent"></script><script type="module" src="archive.js?v=20261027-ai"></script>
 </body></html>
