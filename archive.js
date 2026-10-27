@@ -107,3 +107,11 @@ window.addEventListener('pagehide',()=>{void disposeAsset();});
 run(()=>init(true));
 
 $('review-photo').onchange=()=>run(async()=>{const asset=state.detail?.assets.find(a=>a.id===$('review-photo').value&&a.kind==='photo');if(asset)await chooseAsset(asset);});
+// Preview the target immediately; persist through the existing capture form.
+$('expected-views').addEventListener('input',()=>{if(!state.detail)return;const input=$('expected-views');if(!input.checkValidity())return;const count=state.detail.assets.filter(a=>a.kind==='photo').length;$('capture-count').textContent=count+' / '+Number(input.value);$('capture-ready').textContent=Number(input.value)===state.detail.workflow.capture.expected_views?'待确认':'目标已修改，待保存';});
+$('expected-views').addEventListener('change',()=>{if(canEdit()&&!state.mutation&&$('capture-form').reportValidity())$('capture-form').requestSubmit();});
+let comparisonUrl=null,comparisonRequest=null;
+function resetComparison(){comparisonRequest?.abort();comparisonRequest=null;if(comparisonUrl)URL.revokeObjectURL(comparisonUrl);comparisonUrl=null;$('comparison-image').removeAttribute('src');$('comparison-figure').hidden=true;}
+const originalAcceptDetail=acceptDetail;
+acceptDetail=async function(...args){resetComparison();await originalAcceptDetail(...args);$('comparison-photo').replaceChildren(new Option('不显示对照图',''),...(state.detail?.assets||[]).filter(a=>a.kind==='photo').map(a=>new Option(a.name,a.id)));};
+$('comparison-photo').onchange=()=>run(async()=>{resetComparison();const asset=state.detail?.assets.find(a=>a.kind==='photo'&&a.id===$('comparison-photo').value);if(!asset)return;const controller=new AbortController();comparisonRequest=controller;const projectId=state.id;try{const response=await fetch(state.base+path('/assets/'+encodeURIComponent(asset.id)+'/file'),{headers:headers(),signal:controller.signal});if(!response.ok)throw Error('对照图读取失败');const blob=await response.blob();if(controller.signal.aborted||state.id!==projectId)return;comparisonUrl=URL.createObjectURL(blob);$('comparison-image').src=comparisonUrl;$('comparison-image').alt=asset.name;$('comparison-figure').hidden=false;}catch(error){if(error.name!=='AbortError')throw error;}});
