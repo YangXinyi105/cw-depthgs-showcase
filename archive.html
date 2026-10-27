@@ -13,7 +13,7 @@
  <section class="archive-intro"><p class="eyebrow">建筑资料交接</p><h1>建筑项目档案</h1><p>按建筑保存照片和重建模型。项目成员记录待复核位置，查看人员通过只读链接获取同一份资料。</p></section>
  <p id="cloud-message" class="cloud-message" role="status" aria-live="polite"></p>
  <section id="connection-panel" class="archive-section">
-  <h2>连接项目服务</h2><p id="connection-help">填写已部署的项目服务地址。管理密钥由服务管理员提供，仅保留在当前浏览器会话中。</p>
+  <h2>连接项目服务</h2><p id="connection-help">演示服务地址已填入，管理员输入管理密钥即可连接。查看人员请使用项目的只读分享链接，无需填写密钥。演示服务需保持服务器在线；临时地址更换后需更新分享链接。</p>
   <form id="connect-form" class="archive-form"><label>项目服务地址<input id="api-base" type="url" placeholder="https://api.example.com" required></label><label>管理密钥<input id="admin-key" type="password" autocomplete="off" placeholder="仅项目管理员填写" required></label><button type="submit">连接服务</button></form>
  </section>
  <section id="project-list-panel" class="archive-section" hidden>
@@ -36,5 +36,5 @@
  </section>
 </main>
 <footer><span>CW-DepthGS · 建筑项目档案</span><a href="index.html">返回展示首页</a></footer>
-<script src="service-config.js"></script><script type="module" src="archive.js"></script>
+<script src="service-config.js?v=20261027"></script><script type="module" src="archive.js"></script>
 </body></html>
