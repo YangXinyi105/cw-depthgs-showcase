@@ -77,7 +77,7 @@ async function init(initial=false){
    const detail=await request('/api/projects/'+encodeURIComponent(id),{},candidate);await clearContext();Object.assign(state,candidate,{id,sharedMode});loadAccess();if(sharedMode==='edit')saveAccess();$('connection-panel').hidden=true;await acceptDetail(detail);message('已打开共享项目。');
   }else{
    const raw=window.CW_SERVICE_API||storageGet('cw:api'),candidate={base:raw?normalizeBase(raw):'',admin:'',token:''};candidate.admin=candidate.base?storageGet('cw:admin:'+candidate.base):'';const projects=candidate.admin?await request('/api/projects',{},candidate):null;
-   await clearContext();Object.assign(state,candidate,{sharedMode:''});$('connection-panel').hidden=false;$('api-base').value=candidate.base;$('admin-key').value=candidate.admin;if(projects)await listProjects(projects);else message('项目档案需连接后端服务；本机复核工具可继续直接使用。');
+   await clearContext();Object.assign(state,candidate,{sharedMode:''});$('connection-panel').hidden=false;$('api-base').value=candidate.base;$('admin-key').value=candidate.admin;if(projects)await listProjects(projects);else message(candidate.base?'':'请在连接设置中填写项目服务地址。');
   }
   acceptedHash=nextHash;restoreHash();
  }catch(error){if(!initial)restoreHash();throw error;}finally{state.navigation=false;syncBusy();}

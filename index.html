@@ -1,24 +1,26 @@
 <!doctype html>
 <html lang="zh-CN">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>CW-DepthGS 建筑外观建档与复核</title>
-<meta name="description" content="集中查看建筑照片与重建视角，记录待复核位置，导出带图说明。提供三栋公开建筑案例和本地人工复核工具。">
+<title>CW-DepthGS · 建筑三维建档与复核</title>
+<meta name="description" content="面向既有建筑数字化建档的稀疏视角三维重建与可视化复核。浏览建筑模型，管理云端资料，查看三建筑实验与模块消融结果。">
 <meta name="theme-color" content="#f6f5f1">
-<link rel="stylesheet" href="application.css"><link rel="stylesheet" href="workspace.css">
+<link rel="stylesheet" href="application.css?v=20261027-layout"><link rel="stylesheet" href="workspace.css">
 </head>
 <body>
 <a class="skip" href="#workspace">跳到复核工具</a>
-<header class="app-header"><a class="brand" href="#top"><span>CW</span> DepthGS</a><nav aria-label="主导航"><a href="#workspace">复核工具</a><a href="viewer.html">三维浏览</a><a href="archive.html">项目档案</a><a href="#workflow">使用方式</a><a href="research.html#method">方法</a><a href="research.html#ablation">消融结果</a></nav></header>
+<header class="app-header"><a class="brand" href="index.html"><span>CW</span> DepthGS</a><nav aria-label="主导航"><a href="index.html" aria-current="page">首页</a><a href="viewer.html">三维浏览</a><a href="index.html#workspace">复核工具</a><a href="archive.html">项目档案</a><a href="research.html">研究结果</a></nav></header>
 <main id="top">
-<section class="app-intro">
- <div><p class="eyebrow">建筑外观建档与远程复核</p><h1>把现场照片<br>变成可交接的建筑记录</h1><p class="intro-copy">外观照片散在不同文件夹，远程沟通时很难说明具体位置。将照片与重建视角放在一起，标记需要复核的区域，导出带图备注，方便下一位查看人员接着处理。</p><div class="intro-actions"><a class="primary-link" href="#workspace">打开复核工具</a><a href="research.html#design">查看实验依据 <span aria-hidden="true">↗</span></a></div><p class="intro-foot">无需账号。人工记录保存在当前浏览器，可导出备份和交接。</p></div>
- <figure><img src="assets/cases/4906981/00007-render.png" alt="公开建筑4906981的真实训练结果，测试视角00007" width="480" height="347"><figcaption>公开建筑案例 · 4906981 · 测试视角00007</figcaption></figure>
+<section class="app-intro" aria-labelledby="intro-title">
+ <div><p class="eyebrow">既有建筑数字化建档</p><h1 id="intro-title">稀疏视角建筑重建<br>与可视化复核</h1><p class="intro-copy">用有限影像重建建筑外观，将照片与复核记录归入项目档案，为远程查看和资料交接提供依据。</p><div class="intro-actions"><a class="primary-link" href="viewer.html">三维浏览</a><a class="secondary-link" href="archive.html">项目档案</a></div></div>
+ <figure><img src="assets/cases/4906981/00007-render.png" alt="建筑4906981的重建渲染，独立测试视角00007" width="480" height="347" fetchpriority="high"><figcaption>建筑4906981 · 测试视角重建结果</figcaption></figure>
 </section>
-<section id="workspace" class="tool-section" aria-labelledby="workspace-title"><div class="tool-heading"><div><p class="eyebrow">使用工具</p><h2 id="workspace-title">建筑外观复核</h2></div><p>选择建筑和视角，查看照片，在图中记录待复核位置。示例采用已生成的测试视角渲染图。</p></div><div id="workspace-root"><p role="status">正在加载建筑案例…</p></div><noscript>请启用JavaScript以使用标注与导出。研究说明仍可直接阅读。</noscript></section>
-<section id="workflow" class="workflow" aria-labelledby="workflow-title"><h2 id="workflow-title">一次复核如何交接</h2><ol><li><h3>整理照片</h3><p>按建筑和采集日期归档，保留原始文件。先用三个公开案例熟悉操作，再处理自己的现场记录。</p></li><li><h3>核对位置</h3><p>切换不同观察视角，对照参考照片。画面不清楚的区域记录为待复核，并写明需要补拍的内容。</p></li><li><h3>导出记录</h3><p>将标注截图和备注一起交接。JSON文件可在本工具中恢复记录；打印报告可由浏览器保存为PDF。</p></li></ol></section>
-<section class="usage" aria-labelledby="usage-title"><div><h2 id="usage-title">为现场复核准备资料</h2><p>运维人员可以提前查看建筑外观，整理需要补充观察的位置。资料管理人员能够把分散的照片与复核说明放入同一份建筑档案。</p><p>可对照片添加人工标注，也可以打开已训练模型，连续改变三维观察角度。二维备注用于标明复核位置；工程尺寸与维修判断需要结合现场核查。</p></div><div><h3>展示与项目服务分别运行</h3><p>单目深度和稀疏几何约束用于离线3DGS训练。已生成的展示结果直接由网站加载，关闭训练服务器仍可浏览。项目档案入口需要连接独立的后端服务，供成员共同保存照片和复核记录。</p><p>当前展示来自TUM2TWIN公开数据，属于功能演示案例。现场照片可直接在本机标注；新增成对重建案例需完成离线重建并更新案例清单。</p><a href="viewer.html">打开建筑三维展示</a> · <a href="archive.html">连接项目档案服务</a></div></section>
-<section class="research-entry"><div><p class="eyebrow">研究依据</p><h2>保留完整的实验过程</h2><p>固定24视角的多种子比较、模块消融，以及局部校准在不同建筑上的表现均单独报告。</p></div><div class="research-links"><a href="research.html#design">实验思路</a><a href="research.html#ablation">7组模块消融</a><a href="research.html#results">三建筑验证</a><a href="assets/technical-report.pdf" target="_blank" rel="noopener">技术报告 PDF</a></div></section>
-</main><footer><span>CW-DepthGS · 建筑外观建档与复核</span><span>公开案例展示 / 本地人工记录</span></footer>
+<section class="project-facts" aria-label="实验规模"><dl><div><dt>24<span>张</span></dt><dd>每栋建筑的训练图像</dd></div><div><dt>3<span>栋</span></dt><dd>公开数据集建筑</dd></div><div><dt>27<span>次</span></dt><dd>固定划分的正式训练</dd></div></dl><a href="research.html#design">查看实验设计</a></section>
+<section id="workflow" class="workflow" aria-labelledby="workflow-title"><h2 id="workflow-title">从建筑影像到复核档案</h2><p class="section-lead">照片分散、观察位置难以说明，是建筑资料交接中的常见问题。系统将建筑重建结果与照片记录放在同一套查看流程中。</p><ol><li><span class="step-number">01</span><h3>整理建筑影像</h3><p>保留原始照片与采集日期，按建筑建立项目。</p></li><li><span class="step-number">02</span><h3>查看三维结构</h3><p>打开已完成离线训练的模型，旋转、缩放观察建筑外观。</p></li><li><span class="step-number">03</span><h3>记录复核位置</h3><p>在照片中添加人工标注，写明观察情况或需要补拍的内容。</p></li><li><span class="step-number">04</span><h3>保存与交接</h3><p>将资料保存到云端档案，通过只读链接分享，或导出复核记录。</p></li></ol></section>
+<section class="archive-entry" aria-labelledby="archive-entry-title"><div><h2 id="archive-entry-title">按建筑管理同一份资料</h2><p>项目档案集中保存照片、模型和人工备注。成员更新资料后，查看人员刷新即可读取已保存的内容。</p><a class="primary-link" href="archive.html">项目档案</a></div><dl class="archive-capabilities"><div><dt>资料归档</dt><dd>按建筑名称和采集日期整理照片与模型。</dd></div><div><dt>复核记录</dt><dd>保存照片上的标注，记录修改时间与版本。</dd></div><div><dt>分享交接</dt><dd>提供只读链接，也可下载 JSON 或打印记录。</dd></div></dl></section>
+<section class="research-entry" aria-labelledby="research-entry-title"><h2 id="research-entry-title">重建方法与实验结果</h2><p class="section-lead">CW-DepthGS将稠密单目深度与稀疏几何监督分别建模，结合鲁棒损失和跨视角约束。三栋建筑的多随机种子实验中，PSNR相对RGB-only均有提升。</p><div class="research-links"><a href="research.html#method"><strong>方法框架</strong><span>深度监督与几何约束</span></a><a href="research.html#ablation"><strong>模块消融</strong><span>7组配置逐项比较</span></a><a href="research.html#results"><strong>三建筑验证</strong><span>配对统计与定性对比</span></a><a href="assets/technical-report.pdf" target="_blank" rel="noopener"><strong>技术报告</strong><span>完整说明 · PDF</span></a></div></section>
+<section id="workspace" class="tool-section" aria-labelledby="workspace-title"><div class="tool-heading"><h2 id="workspace-title">照片对照与人工复核</h2><p>选择公开案例，对照原始照片与测试视角渲染；也可导入自己的照片，记录待复核的位置。</p></div><div id="workspace-root"><p role="status">正在加载建筑案例…</p></div><noscript>请启用JavaScript以使用标注与导出。研究说明仍可直接阅读。</noscript></section>
+<section class="data-note" aria-label="案例来源"><h2>案例来源与使用范围</h2><p>公开案例来自TUM2TWIN数据集。三维模型由离线训练生成；上传现场照片用于建档与人工复核，新增建筑重建需另行运行训练流程。</p></section>
+</main><footer><span>CW-DepthGS · 建筑三维建档与复核</span><a href="assets/technical-report.pdf" target="_blank" rel="noopener">技术报告 PDF</a></footer>
 <script>if(['method','design','ablation','calibration','results','evidence'].includes(location.hash.slice(1)))location.replace('research.html'+location.hash);</script>
-<script type="module" src="workspace.js"></script>
+<script type="module" src="workspace.js?v=20261027-layout"></script>
 </body></html>

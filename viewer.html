@@ -4,21 +4,21 @@
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="在浏览器中连续旋转、缩放已训练的三维高斯模型。支持本地SPLAT文件，无需上传。">
   <title>三维模型浏览 · CW-DepthGS</title>
-  <link rel="stylesheet" href="application.css"><link rel="stylesheet" href="viewer.css?v=20261026-full">
+  <link rel="stylesheet" href="application.css?v=20261027-layout"><link rel="stylesheet" href="viewer.css?v=20261026-full">
 </head>
 <body>
   <a class="skip" href="#model-file">跳到选择模型</a>
-  <header class="app-header"><a class="brand" href="index.html"><span>CW</span> DepthGS</a><nav aria-label="主导航"><a href="index.html#workspace">照片复核</a><a href="research.html#method">方法与实验</a></nav></header>
+  <header class="app-header"><a class="brand" href="index.html"><span>CW</span> DepthGS</a><nav aria-label="主导航"><a href="index.html">首页</a><a href="viewer.html" aria-current="page">三维浏览</a><a href="index.html#workspace">复核工具</a><a href="archive.html">项目档案</a><a href="research.html">研究结果</a></nav></header>
   <main><section class="model-page">
-    <p class="eyebrow">查看训练后的空间结构</p><h1>三维模型浏览</h1>
-    <p>打开已训练并导出的模型，连续改变观察角度。拖动旋转，滚轮缩放，按住右键拖动平移；触屏设备可用单指旋转、双指缩放。</p>
+    <h1>三维模型浏览</h1>
+    <p>打开建筑4906981的重建模型，观察屋顶与立面。拖动旋转，滚轮缩放，右键拖动平移；触屏可用单指旋转、双指缩放。</p>
     <div class="model-demo-row"><button type="button" id="model-demo">打开完整点数版（81.4 MB）</button> <button type="button" id="model-light" class="secondary">低内存版（25.6 MB）</button><p>默认入口保留原模型的3,383,214个高斯点，减少精简造成的细节损失。文件点击后才下载；设备内存不足时可使用80万点预览。</p></div>
     <div class="model-file-row"><label for="model-file">或选择本地 .splat 模型</label><input id="model-file" type="file" accept=".splat"><span>每个文件不超过100 MB，仅在当前浏览器中读取。</span></div>
     <p id="model-status" role="status" aria-live="polite">可打开建筑展示模型，或选择自己的模型文件。</p>
     <div id="model-view" class="model-view" aria-label="三维高斯模型浏览区域"><div class="model-empty">模型加载后，可在这里旋转和缩放。</div></div>
     <div class="model-actions" aria-label="模型操作"><button type="button" id="model-reset" disabled>恢复初始视角</button><button type="button" id="model-left" disabled>向左旋转</button><button type="button" id="model-right" disabled>向右旋转</button><button type="button" id="model-near" disabled>放大</button><button type="button" id="model-far" disabled>缩小</button><button type="button" id="model-flip" disabled>翻转竖直方向</button><button type="button" id="model-close" disabled>关闭模型</button></div>
     <div class="model-description"><h2>使用已有重建结果</h2><p>建筑4906981来自TUM2TWIN公开数据，模型完成了7000次训练迭代。完整点数版使用KSplat压缩，保留全部高斯点，对位置、尺度和旋转进行量化；网页颜色使用SH0分量。<a href="assets/models/building-4906981-full-sh0.json">查看转换记录</a>。</p><p>整体结构适合在参考视角附近查看。贴近立面或进入原图没有充分覆盖的区域，仍可能出现模糊、浮点和遮挡缺口。正式实验指标使用原训练模型，网页转换版未重新计算这些指标。</p><p>本地入口读取标准32字节记录格式的 .splat 文件。普通照片、视频和PLY点云需先完成重建及格式转换。模型文件由本站提供，渲染在访问者浏览器中运行，无需训练服务器保持在线；页面帧率取决于设备性能。</p></div>
-  </section></main><footer><span>CW-DepthGS · 建筑模型浏览</span><a href="index.html">返回建筑复核</a></footer>
+  </section></main><footer><span>CW-DepthGS · 建筑模型浏览</span><a href="index.html">返回首页</a></footer>
   <script type="module">import {initStandaloneViewer} from './viewer.js?v=20261026-full';initStandaloneViewer();</script>
 </body>
 </html>
