@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>人工复核 · CW-DepthGS</title>
+<meta name="description" content="选择建筑与测试视角，对照参考照片与CW-DepthGS渲染，在照片上记录人工复核标注并导出。">
+<meta name="theme-color" content="#f8f5ea">
+<link rel="preload" href="assets/fonts/eb-garamond.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="fonts.css?v=20261027-atlas"><link rel="stylesheet" href="application.css?v=20261027-atlas"><link rel="stylesheet" href="workspace.css?v=20261027-atlas"><link rel="stylesheet" href="review.css?v=20261027-atlas">
+<link rel="icon" type="image/svg+xml" href="assets/logo-mark.svg"></head>
+<body class="review-page">
+<a class="skip" href="#main">跳到主要内容</a>
+<div class="app">
+ <aside class="sidebar" aria-label="站点导航">
+  <a class="brand" href="index.html" aria-label="CW-DepthGS 首页"><svg viewBox="0 0 32 32" aria-hidden="true"><g fill="none" stroke="#14130b" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round"><path d="M5 27.5V13.2L16 5l11 8.2v14.3"/><path d="M2.5 27.5h27"/><ellipse cx="20.2" cy="20" rx="4.8" ry="2.5" transform="rotate(22 20.2 20)"/><ellipse cx="16" cy="14.8" rx="3.3" ry="1.9"/></g><ellipse cx="11.6" cy="20.6" rx="4.4" ry="2.3" transform="rotate(-24 11.6 20.6)" fill="#566147"/></svg><span>CW-DepthGS</span></a>
+  <nav class="side-nav" aria-label="主导航"><a href="index.html"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9.5h13V10"/><path d="M10 19.5v-5h4v5"/></svg><span>总览<small>平台首页</small></span></a><a href="viewer.html"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/></svg><span>三维浏览<small>2 个展示模型</small></span></a><a href="review.html" aria-current="page"><i class="pill"></i><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="14" rx="1.5"/><path d="M3.5 15.5l5-4.5 4 3.5 3-2.5 5 4"/><circle cx="16" cy="9.2" r="1.6"/></svg><span>人工复核<small>9 个测试视角</small></span></a><a href="archive.html"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 8h17v11.5h-17z"/><path d="M2.5 4.5h19V8h-19z"/><path d="M9.5 12h5"/></svg><span>项目档案<small>采集至交付闭环</small></span></a><a href="research.html"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 19.5V10M10 19.5V5M15.5 19.5v-7M21 19.5H3"/></svg><span>研究结果<small>27 次正式训练</small></span></a></nav>
+  <a class="featured" href="review.html"><p class="caps">Featured view</p><img src="assets/cases/4906981/00007-render.png" alt="" width="480" height="347"><h3>一处屋檐，<br>二十四个视角。</h3><p>在照片上标注问题，验收结论可退回补拍或重新重建。</p><span class="more">开始复核 <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
+ </aside>
+ <div class="topbar"><label class="search"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.3-4.3"/></svg><input type="search" placeholder="搜索页面、建筑或功能…" aria-label="搜索页面，回车跳转"></label><button class="icon-btn" type="button" title="档案服务状态"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 16.5V11a6 6 0 0 1 12 0v5.5l1.5 1.5h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/></svg><span class="dot"></span></button><span class="avatar" title="评委">评</span></div>
+ <main class="stage" id="main">
+  <section class="picker" aria-labelledby="pick-title">
+   <h1 class="visually-hidden" id="pick-title">选择建筑与测试视角</h1>
+   <div class="thumbs reveal" id="building-filter" role="group" aria-label="按建筑筛选"></div>
+   <div class="flow" id="flow" aria-label="测试视角卡片，左右方向键切换"></div>
+   <div class="spin flow-nav reveal d3"><button type="button" id="prev" aria-label="上一个视角"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4v6h6"/><path d="M4.6 15a8 8 0 1 0 1.8-8.3L4 10"/></svg></button><span id="flow-count">01 / 09</span><button type="button" id="next" aria-label="下一个视角"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4v6h-6"/><path d="M19.4 15a8 8 0 1 1-1.8-8.3L20 10"/></svg></button></div>
+   <p class="caption reveal d4">Hover to reveal the render, click to review.</p>
+  </section>
+  <section class="stage-view" aria-labelledby="stage-title">
+   <div class="stage-top"><button class="btn" id="back" type="button"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>重新选择</button><h1 id="stage-title">复核</h1><div class="segment" id="mode-switch" role="group" aria-label="对照方式"><button type="button" data-mode="pair" aria-pressed="true">并排标注</button><button type="button" data-mode="slider" aria-pressed="false">滑块对比</button></div></div>
+   <div class="stage-main">
+    <div id="stage-pair" class="stage-pair"></div>
+    <div id="stage-slider" class="compare-slider" hidden><img id="slider-ref" alt="参考照片"><img id="slider-render" class="after" alt="CW-DepthGS渲染"><span class="lab l">参考照片</span><span class="lab r">CW-DepthGS</span><span class="handle">⇆</span><input type="range" min="0" max="100" value="50" aria-label="拖动对比"></div>
+   </div>
+  </section>
+  <div id="tool-hidden" hidden></div>
+  <div id="workspace-root" hidden></div>
+ </main>
+ <aside class="panel scroll" id="panel" aria-label="详情">
+  <div class="pick-panel">
+   <p class="caps" id="pick-family">Test view</p>
+   <h1 id="pick-view">00007</h1>
+   <div class="tags" id="pick-tags"></div>
+   <p class="lede">九个已归档的独立测试视角来自三栋TUM2TWIN建筑，每栋按固定深度与CW-DepthGS的PSNR差值取最好、中位和最差视角。悬停中间卡片预览渲染，点击进入对照与标注。</p>
+   <hr class="rule">
+   <h2>视角信息</h2>
+   <dl class="traits"><div><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="1"/><path d="M4 12h16M12 4v16"/></svg><dt>选取规则</dt><dd id="pick-select">—</dd></div><div><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="14" rx="1.5"/><path d="M3.5 15.5l5-4.5 4 3.5 3-2.5 5 4"/><circle cx="16" cy="9.2" r="1.6"/></svg><dt>图像尺寸</dt><dd id="pick-size">480 × 347</dd></div><div><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l8.5 4.5-8.5 4.5L3.5 8z"/><path d="M3.5 12.5l8.5 4.5 8.5-4.5"/></svg><dt>训练视角</dt><dd id="pick-views">24 张</dd></div><div><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg><dt>训练迭代</dt><dd id="pick-iter">7000 次</dd></div></dl>
+   <div class="pick-actions"><button class="btn btn-primary" id="start" type="button">开始复核<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button><button class="btn" id="peek" type="button">预览渲染</button></div>
+   <a class="closeup" href="archive.html"><img src="assets/cases/4959323/00010-render.png" alt="" width="480" height="347"><div><h3>记录进入档案</h3><p>本页记录保存在当前浏览器；项目协作与验收请使用项目档案。</p></div><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></a>
+  </div>
+  <div class="tool-panel" id="stage-panel"></div>
+ </aside>
+</div>
+<script src="atlas.js?v=20261027-atlas"></script>
+<script src="workspace.js?v=20261027-atlas"></script><script src="review.js?v=20261027-atlas"></script>
+</body></html>

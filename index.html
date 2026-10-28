@@ -1,26 +1,56 @@
 <!doctype html>
 <html lang="zh-CN">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>CW-DepthGS · 建筑三维建档与复核</title>
-<meta name="description" content="面向既有建筑数字化建档的稀疏视角三维重建与可视化复核。浏览建筑模型，管理云端资料，查看三建筑实验与模块消融结果。">
-<meta name="theme-color" content="#f6f5f1">
-<link rel="stylesheet" href="application.css?v=20261027-layout"><link rel="stylesheet" href="workspace.css">
-<link rel="icon" type="image/png" href="assets/cases/4906981/00007-render.png"></head>
-<body>
-<a class="skip" href="#top">跳到主要内容</a>
-<header class="app-header"><a class="brand" href="index.html"><span>CW</span> DepthGS</a><nav aria-label="主导航"><a href="index.html" aria-current="page">首页</a><a href="viewer.html">三维浏览</a><a href="archive.html">项目与复核</a><a href="research.html">研究结果</a></nav></header>
-<main id="top">
-<section class="app-intro" aria-labelledby="intro-title">
- <div><p class="eyebrow">既有建筑数字化建档</p><h1 id="intro-title">稀疏视角建筑重建<br>与可视化复核</h1><p class="intro-copy">用有限影像重建建筑外观，将照片与复核记录归入项目档案，为远程查看和资料交接提供依据。</p><div class="intro-actions"><a class="primary-link" href="viewer.html">三维浏览</a><a class="secondary-link" href="archive.html">项目与复核</a></div></div>
- <figure><img src="assets/cases/4906981/00007-render.png" alt="建筑4906981的重建渲染，独立测试视角00007" width="480" height="347" fetchpriority="high"><figcaption>建筑4906981 · 测试视角重建结果</figcaption></figure>
-</section>
-<section class="project-facts" aria-label="实验规模"><dl><div><dt>24<span>张</span></dt><dd>每栋建筑的训练图像</dd></div><div><dt>3<span>栋</span></dt><dd>公开数据集建筑</dd></div><div><dt>27<span>次</span></dt><dd>固定划分的正式训练</dd></div></dl><a href="research.html#design">查看实验设计</a></section>
-<section id="workflow" class="workflow" aria-labelledby="workflow-title"><h2 id="workflow-title">稀疏采集、智能重建与复核交付</h2><p class="section-lead">系统把24视角采集、GPU离线重建和Web复核连接为同一条可追踪流程；复核发现问题后，可继续补拍或生成新模型版本。</p><ol><li><span class="step-number">01</span><h3>建立采集任务</h3><p>按建筑建立24视角采集批次，记录地点、负责人和现场限制。</p></li><li><span class="step-number">02</span><h3>检查输入资料</h3><p>上传照片并检查数量、分辨率、亮度、清晰度和重复文件。</p></li><li><span class="step-number">03</span><h3>离线智能重建</h3><p>导出任务包，在GPU环境运行CW-DepthGS，再导入模型与指标。</p></li><li><span class="step-number">04</span><h3>复核与处置</h3><p>对照片和模型进行复核，将问题标记为补拍、重建或已解决。</p></li><li><span class="step-number">05</span><h3>验收与交付</h3><p>保存验收结论和模型版本，通过只读链接完成成果交接。</p></li></ol></section>
-<section class="archive-entry" aria-labelledby="archive-entry-title"><div><h2 id="archive-entry-title">按建筑追踪完整项目流程</h2><p>项目档案统一保存采集批次、原始照片、重建任务、模型版本、质量指标和验收记录。每次补拍与重新重建都可回溯到对应版本。</p><a class="primary-link" href="archive.html">进入项目档案</a></div><dl class="archive-capabilities"><div><dt>采集管理</dt><dd>检查24视角任务进度，导出带清单的重建任务包。</dd></div><div><dt>版本关联</dt><dd>登记模型、指标、配置、硬件信息和文件校验值。</dd></div><div><dt>复核交付</dt><dd>跟踪问题处理与验收状态，并提供只读交接链接。</dd></div></dl></section>
-<section class="research-entry" aria-labelledby="research-entry-title"><h2 id="research-entry-title">重建方法与实验结果</h2><p class="section-lead">CW-DepthGS将稠密单目深度与稀疏几何监督分别建模，结合鲁棒损失和跨视角约束。三栋建筑的多随机种子实验中，PSNR相对RGB-only均有提升。</p><div class="research-links"><a href="research.html#method"><strong>方法框架</strong><span>深度监督与几何约束</span></a><a href="research.html#ablation"><strong>模块消融</strong><span>7组配置逐项比较</span></a><a href="research.html#results"><strong>三建筑验证</strong><span>配对统计与定性对比</span></a><a href="assets/technical-report-20261027.pdf" target="_blank" rel="noopener"><strong>技术报告</strong><span>Web应用版 · PDF</span></a></div></section>
-
-<section class="data-note" aria-label="案例来源"><h2>案例来源与使用范围</h2><p>公开案例来自TUM2TWIN数据集。三维模型由离线训练生成；上传现场照片用于建档与人工复核，新增建筑重建需另行运行训练流程。</p></section>
-</main><footer><span>CW-DepthGS · 建筑三维建档与复核</span><a href="assets/technical-report-20261027.pdf" target="_blank" rel="noopener">技术报告 PDF</a></footer>
-<script>if(['method','design','ablation','calibration','results','evidence'].includes(location.hash.slice(1)))location.replace('research.html'+location.hash);</script>
-<script>if(location.hash==="#workspace")location.replace("archive.html");</script>
+<title>CW-DepthGS · 稀疏视角建筑重建与可视化复核平台</title>
+<meta name="description" content="面向既有建筑数字化建档的稀疏视角三维高斯重建与可视化复核平台：24张图像训练可实时浏览的建筑场景，重建成果接入采集、复核、验收与只读交付闭环。">
+<meta name="theme-color" content="#f8f5ea">
+<link rel="preload" href="assets/fonts/eb-garamond.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="fonts.css?v=20261027-atlas"><link rel="stylesheet" href="application.css?v=20261027-atlas">
+<link rel="icon" type="image/svg+xml" href="assets/logo-mark.svg"></head>
+<body class="home">
+<a class="skip" href="#main">跳到主要内容</a>
+<div class="app">
+ <aside class="sidebar" aria-label="站点导航">
+  <a class="brand" href="index.html" aria-label="CW-DepthGS 首页"><svg viewBox="0 0 32 32" aria-hidden="true"><g fill="none" stroke="#14130b" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round"><path d="M5 27.5V13.2L16 5l11 8.2v14.3"/><path d="M2.5 27.5h27"/><ellipse cx="20.2" cy="20" rx="4.8" ry="2.5" transform="rotate(22 20.2 20)"/><ellipse cx="16" cy="14.8" rx="3.3" ry="1.9"/></g><ellipse cx="11.6" cy="20.6" rx="4.4" ry="2.3" transform="rotate(-24 11.6 20.6)" fill="#566147"/></svg><span>CW-DepthGS</span></a>
+  <nav class="side-nav" aria-label="主导航"><a href="index.html" aria-current="page"><i class="pill"></i><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9.5h13V10"/><path d="M10 19.5v-5h4v5"/></svg><span>总览<small>平台首页</small></span></a><a href="viewer.html"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/></svg><span>三维浏览<small>2 个展示模型</small></span></a><a href="review.html"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="14" rx="1.5"/><path d="M3.5 15.5l5-4.5 4 3.5 3-2.5 5 4"/><circle cx="16" cy="9.2" r="1.6"/></svg><span>人工复核<small>9 个测试视角</small></span></a><a href="archive.html"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 8h17v11.5h-17z"/><path d="M2.5 4.5h19V8h-19z"/><path d="M9.5 12h5"/></svg><span>项目档案<small>采集至交付闭环</small></span></a><a href="research.html"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 19.5V10M10 19.5V5M15.5 19.5v-7M21 19.5H3"/></svg><span>研究结果<small>27 次正式训练</small></span></a></nav>
+  <a class="featured" href="review.html"><p class="caps">Featured view</p><img src="assets/cases/4906981/00007-render.png" alt="" width="480" height="347"><h3>一处屋檐，<br>二十四个视角。</h3><p>在照片上标注问题，验收结论可退回补拍或重新重建。</p><span class="more">开始复核 <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
+ </aside>
+ <div class="topbar"><label class="search"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.3-4.3"/></svg><input type="search" placeholder="搜索页面、建筑或功能…" aria-label="搜索页面，回车跳转"></label><button class="icon-btn" type="button" title="档案服务状态"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 16.5V11a6 6 0 0 1 12 0v5.5l1.5 1.5h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/></svg><span class="dot"></span></button><span class="avatar" title="评委">评</span></div>
+ <main class="stage" id="main">
+  <div class="thumbs reveal" role="group" aria-label="选择建筑">
+   <button class="thumb" type="button" data-building="4906981" aria-pressed="true"><img src="assets/cases/4906981/00007-render.png" alt="" width="480" height="347"><b>4906981</b><i>独立验证</i></button>
+   <button class="thumb" type="button" data-building="4959323" aria-pressed="false"><img src="assets/cases/4959323/00008-render.png" alt="" width="480" height="347"><b>4959323</b><i>方法选型</i></button>
+   <button class="thumb" type="button" data-building="pilot" aria-pressed="false"><img src="assets/cases/pilot/00006-render.png" alt="" width="480" height="348"><b>pilot</b><i>独立验证</i></button>
+  </div>
+  <div class="specimen">
+   <canvas id="hero-canvas" aria-label="建筑4906981重建点云：拖动旋转，滚轮缩放"></canvas>
+   <img class="photo" id="specimen-photo" alt="" width="480" height="347">
+   <div class="ground"></div>
+   <p class="load-note" id="load-note">Loading point cloud · <span id="loader-count">0</span>%</p>
+  </div>
+  <div class="rail reveal d2" role="toolbar" aria-label="视图工具">
+   <button type="button" id="z-in" aria-label="放大"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.3-4.3M11 8v6M8 11h6"/></svg></button>
+   <button type="button" id="z-out" aria-label="缩小"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.3-4.3M8 11h6"/></svg></button>
+   <button type="button" id="fs" aria-label="全屏"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+   <button type="button" id="auto" class="on" aria-pressed="true" aria-label="自动旋转"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.6"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg></button>
+  </div>
+  <div class="spin reveal d3"><button type="button" id="rot-l" aria-label="向左旋转45度"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4v6h6"/><path d="M4.6 15a8 8 0 1 0 1.8-8.3L4 10"/></svg></button><span id="angle">360°</span><button type="button" id="rot-r" aria-label="向右旋转45度"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4v6h-6"/><path d="M19.4 15a8 8 0 1 1-1.8-8.3L20 10"/></svg></button></div>
+  <p class="caption reveal d4">Twenty-four views, and the building keeps its form.</p>
+ </main>
+ <aside class="panel scroll" id="panel" aria-label="详情">
+  <p class="caps" id="b-family">TUM2TWIN · Independent validation</p>
+  <h1 id="b-name" class="split-title">4906981</h1>
+  <div class="tags" id="b-tags"><span class="tag">24 视角</span><span class="tag">CW-DepthGS</span><span class="tag">+0.40 dB</span></div>
+  <p class="lede" id="b-lede">TUM2TWIN公开数据中的一栋多层建筑，用于独立验证。仅用24张训练图像，CW-DepthGS的三种子平均PSNR较RGB-only提高0.3994 dB，配对Bootstrap 95%区间为[0.3048, 0.4953]。</p>
+  <hr class="rule">
+  <h2>关键指标</h2>
+  <dl class="traits" id="b-traits"></dl>
+  <hr class="rule">
+  <h2>实验条件</h2>
+  <dl class="traits"><div><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="14" rx="1.5"/><path d="M3.5 15.5l5-4.5 4 3.5 3-2.5 5 4"/><circle cx="16" cy="9.2" r="1.6"/></svg><dt>训练视角</dt><dd>24 张</dd></div><div><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg><dt>训练迭代</dt><dd>7000 次</dd></div><div><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="1"/><path d="M4 12h16M12 4v16"/></svg><dt>随机种子</dt><dd>0 · 1 · 2</dd></div><div><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l7.5 3v5.5c0 4.2-3.2 7.7-7.5 8.5-4.3-.8-7.5-4.3-7.5-8.5V6.5z"/><path d="M8.8 12l2.3 2.3 4.2-4.3"/></svg><dt>配对 Bootstrap</dt><dd>10,000 次</dd></div></dl>
+  <a class="closeup reveal d5" href="review.html" id="b-closeup"><img src="assets/cases/4906981/00012-render.png" alt="" width="480" height="347"><div><h3>细节对照</h3><p>参考照片与CW-DepthGS渲染逐视角对照，并在照片上标注问题。</p></div><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></a>
+ </aside>
+</div>
+<script src="atlas.js?v=20261027-atlas"></script>
+<script type="module" src="home.js?v=20261027-atlas"></script>
 </body></html>

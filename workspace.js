@@ -110,6 +110,7 @@
     if (!building.local) loadImage(ui.reference,view.reference,building.name+' '+view.label+' 参考照片',token);
     loadImage(ui.render,view.render,building.name+' '+view.label+(building.local?' 现场照片':' 重建渲染'),token);
     updateList(); notify('已打开 '+building.name+' · '+view.label+'。');
+    root.dispatchEvent(new CustomEvent('ws:view',{detail:{building,view}}));
   }
   function addNote(x,y) {
     if (!ui.render.image.naturalWidth || ui.render.image.hidden) { notify('图像加载完成后才能添加标注。',true); return; }
@@ -124,7 +125,7 @@
   }
   function updateList() {
     ui.list.replaceChildren(); ui.count.textContent='当前视角 '+notes.length+' 条人工标注';
-    if (!notes.length) ui.list.append(el('li','尚无标注。点击渲染图，或使用“在中心添加标注”按钮。',{class:'ws-empty'}));
+    if (!notes.length) ui.list.append(el('p','尚无标注。点击渲染图，或使用“在中心添加标注”按钮。',{class:'ws-empty'}));
     notes.forEach((n,i)=>{
       const row=el('li',null,{class:'ws-note-row'});
       row.append(button('标注 '+(i+1),()=>{selected=n.id;updateList();ui.note.focus();},'ws-note-select'));
@@ -227,9 +228,9 @@
   }
   function buildUI(){
     root.replaceChildren();root.classList.add('cw-workspace');ui={};
-    const intro=el('div',null,{class:'ws-intro'});intro.append(el('p','使用下方建筑案例，或导入现场照片开始复核。'));
+    const intro=el('div',null,{class:'ws-intro'});intro.append(el('p','可直接试用下方公开案例，也可以选择自己的现场照片，添加人工备注并导出记录。'));
     ui.photos=el('input',null,{type:'file',accept:'image/jpeg,image/png,image/webp',multiple:'',hidden:''});ui.photos.onchange=importPhotos;intro.append(button('选择本地现场照片',()=>ui.photos.click()),ui.photos);
-    ui.storage=el('p','本工具的标注保存于本机。跨设备共享请使用项目档案，或导出JSON文件。',{class:'ws-storage',role:'status'});intro.append(ui.storage);root.append(intro);
+    ui.storage=el('p','标注保存在当前浏览器，请下载JSON档案备份或转移到其他设备。',{class:'ws-storage',role:'status'});intro.append(ui.storage);root.append(intro);
     const controls=el('div',null,{class:'ws-controls'});ui.building=el('select');ui.view=el('select');manifest.buildings.forEach(b=>ui.building.append(el('option',b.name,{value:b.id})));ui.building.onchange=()=>selectBuilding(ui.building.value);ui.view.onchange=()=>selectView(ui.view.value);
     controls.append(field('建筑',ui.building),field('视角',ui.view),button('重新加载图像',()=>selectView(view.id)));root.append(controls);
     const info=el('div',null,{class:'ws-controls'});ui.recordName=el('input',null,{type:'text',maxlength:'120',placeholder:'例如：东侧办公楼外观记录'});ui.captureDate=el('input',null,{type:'date'});

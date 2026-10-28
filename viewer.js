@@ -135,7 +135,7 @@ export async function mountSplatViewer(container, {url, name = '三维模型', o
     stage = document.createElement('div'); stage.className='splat-surface'; container.append(stage);
     try { renderer = new THREE.WebGLRenderer({antialias:false,alpha:false}); }
     catch(error) { throw new Error('当前浏览器无法启用WebGL 2，请在支持硬件加速的浏览器中打开。'); }
-    renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 1.5)); renderer.setClearColor(0xebeeea,1);
+    renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 1.5)); renderer.setClearColor(0xf8f5ea,1);
     stage.append(renderer.domElement);renderer.domElement.tabIndex=0;renderer.domElement.setAttribute('aria-label',name+'，拖动旋转，滚轮缩放');
     if(initialView && (!['position','target','up'].every(k=>Array.isArray(initialView[k])&&initialView[k].length===3&&initialView[k].every(Number.isFinite))||!Number.isFinite(initialView.fov)||initialView.fov<10||initialView.fov>120))throw new Error('初始相机信息格式错误。');
     const target = new THREE.Vector3(...(initialView?.target||info.center));
@@ -181,14 +181,16 @@ export function initStandaloneViewer() {
   const input=document.getElementById('model-file'),host=document.getElementById('model-view'),status=document.getElementById('model-status');
   if(!input||!host||!status)return;
   const demo=document.getElementById('model-demo'),light=document.getElementById('model-light');
-  const controls=[...document.querySelectorAll('.model-actions button')];let current, fileURL, abort;
+  // The rail and spin buttons act on a loaded model; the close button also cancels a load in progress.
+  const controls=['model-reset','model-near','model-far','model-flip','model-left','model-right'].map(id=>document.getElementById(id)).filter(Boolean);
+  const closeButton=document.getElementById('model-close');let current, fileURL, abort;
   const empty=()=>{const message=document.createElement('div');message.className='model-empty';message.textContent='模型加载后，可在这里旋转和缩放。';host.replaceChildren(message);};
-  const close=async()=>{abort?.abort();if(current)await current.dispose();current=null;if(fileURL)URL.revokeObjectURL(fileURL);fileURL=null;controls.forEach(b=>b.disabled=true);empty();};
+  const close=async()=>{abort?.abort();if(current)await current.dispose();current=null;if(fileURL)URL.revokeObjectURL(fileURL);fileURL=null;controls.forEach(b=>b.disabled=true);if(closeButton)closeButton.disabled=true;empty();};
   const load=async(source,name,initialView,format='splat')=>{
     input.disabled=true;if(demo)demo.disabled=true;if(light)light.disabled=true;
     try{await close();host.replaceChildren();abort=new AbortController();
       const url=source instanceof File?(fileURL=URL.createObjectURL(source)):source;
-      document.getElementById('model-close').disabled=false;
+      if(closeButton)closeButton.disabled=false;
       current=await mountSplatViewer(host,{url,name,initialView,format,signal:abort.signal,onProgress:p=>{status.textContent=p.stage==='ready'?name+' · '+p.count.toLocaleString('zh-CN')+'个高斯点，可开始浏览。':p.stage==='reading'?'正在读取模型'+(p.percent===null?'…':' '+p.percent+'%'):'正在准备三维渲染，请稍候…';}});
       controls.forEach(b=>b.disabled=false);
     }catch(error){await close();status.textContent=error.name==='AbortError'?'已取消模型加载。':'模型打开失败：'+error.message;}

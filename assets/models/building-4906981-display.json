@@ -8,21 +8,31 @@
   "sourceGaussians": 3383214,
   "retainedGaussians": 800000,
   "outputBytes": 25600000,
-  "outputSha256": "80d56db6004a4450e31742703642b8f7d8e5d45b57ed8a7ed377dfcfba651ed9",
+  "outputSha256": "bb3dfb3e6b540c4b636a5d6d27eba8c5cdb1834e91ea352f7ae9720d0231cbd5",
   "algorithm": {
     "finitePositiveScaleAndRotationFilter": true,
     "minimumOpacity": 0.05,
     "maximumScaleQuantile": 0.995,
-    "maximumScaleThreshold": 0.11400075256824493,
-    "eligibleGaussians": 2074458,
+    "maximumScaleThreshold": 0.11400073021650314,
+    "eligibleGaussians": 2054479,
     "ranking": "opacity * second_largest_scale * largest_scale",
     "selection": "Top scores, stable sort; no new or interpolated Gaussians",
-    "color": "RGB = clip(0.5 + 0.28209479177387814 * f_dc, 0, 1), 8-bit; higher SH terms discarded",
-    "rotation": "Normalized quaternion [w,x,y,z], encoded uint8(q*128+128)",
-    "opacity": "uint8(255 * sigmoid(source_opacity))",
-    "scale": "float32(exp(source_log_scale))"
+    "color": "SH0 colour copied from the archived exports",
+    "opacity": "8-bit opacity; ranking uses the centre of each quantisation bin"
   },
-  "note": "展示精简版，不代表完整模型的定量实验效果；未重新训练。",
+  "rebuiltFrom": [
+    {
+      "file": "building-4906981-opacity-3p2m.splat",
+      "sha256": "0223d6719fa345a957428fe0bd2c5b8366afdb0b68407e620f1c0531c61dafbb",
+      "gaussians": 3200000
+    },
+    {
+      "file": "building-4906981-opacity-tail.splat",
+      "sha256": "66baae784db7de03f898063ab3b92919abe22f6c2e5deab293d24a184cfca355",
+      "gaussians": 183214
+    }
+  ],
+  "note": "展示精简版，不代表完整模型的定量实验效果；未重新训练。原预览文件在2026-10-27运行包中损坏，本文件由同一训练模型的存档导出按原筛选规则重建。",
   "initialView": {
     "position": [
       -2.1528259800822354,
@@ -40,8 +50,6 @@
       -0.6778956112520607
     ],
     "fov": 58.016875282077656,
-    "sourceCameraId": 28,
-    "sourceImage": "DJI_20241217094538_0025_D.JPG",
-    "derivation": "COLMAP camera-to-world rotation: forward=column2, up=-column1; target distance projected from retained-point median"
+    "sourceCameraId": 28
   }
 }

@@ -1,64 +1,79 @@
 <!doctype html>
 <html lang="zh-CN">
-<head>
- <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
- <meta name="referrer" content="no-referrer">
- <title>建筑项目档案 · CW-DepthGS</title>
- <link rel="stylesheet" href="application.css?v=20261027-closed-loop"><link rel="stylesheet" href="archive.css?v=20261027-closed-loop"><link rel="stylesheet" href="viewer.css">
-<link rel="icon" type="image/png" href="assets/cases/4906981/00007-render.png"><style>.review-image-pair{display:flex;gap:24px;align-items:flex-start}.review-image-pair>figure,.review-image-pair>.cloud-image-stage{flex:1;min-width:0;margin:0}@media(max-width:760px){.review-image-pair{flex-direction:column}.review-image-pair>*{width:100%}}</style></head>
-<body>
-<a class="skip" href="#archive-main">跳到项目档案</a>
-<header class="app-header"><a class="brand" href="index.html"><span>CW</span> DepthGS</a><nav aria-label="主导航"><a href="index.html">首页</a><a href="viewer.html">三维浏览</a><a href="archive.html" aria-current="page">项目与复核</a><a href="research.html">研究结果</a></nav></header>
-<main id="archive-main" class="archive-main">
- <section class="archive-intro"><h1>建筑数字化项目</h1><p>从24视角采集、离线智能重建到Web复核与只读交付，持续记录每次补拍和模型迭代。</p></section>
- <p id="cloud-message" class="cloud-message" role="status" aria-live="polite"></p>
- <section id="connection-panel" class="archive-section">
-  <h2>管理项目</h2><p id="connection-help">输入管理密钥，打开已有档案或新建项目。查看共享资料时，请使用项目提供的只读链接。</p>
-  <form id="connect-form" class="archive-form connection-form"><label>管理密钥<input id="admin-key" type="password" autocomplete="off" placeholder="粘贴项目管理密钥" required></label><button type="submit">连接服务</button><details class="connection-settings wide"><summary>连接设置</summary><label>项目服务地址<input id="api-base" type="url" placeholder="https://api.example.com" required></label><p class="minor">已配置默认服务；连接其他部署或本地服务时可修改。</p></details></form>
- </section>
- <section id="project-list-panel" class="archive-section" hidden>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>项目档案 · CW-DepthGS</title>
+<meta name="description" content="建筑项目档案：采集批次、质量提示、重建版本、复核标注、验收结论与AI辅助分析的闭环管理。">
+<meta name="theme-color" content="#f8f5ea">
+<link rel="preload" href="assets/fonts/eb-garamond.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="fonts.css?v=20261027-atlas"><link rel="stylesheet" href="application.css?v=20261027-atlas"><link rel="stylesheet" href="archive.css?v=20261027-atlas"><link rel="stylesheet" href="viewer.css?v=20261027-atlas">
+<link rel="icon" type="image/svg+xml" href="assets/logo-mark.svg"></head>
+<body class="archive-page">
+<a class="skip" href="#main">跳到主要内容</a>
+<div class="app">
+ <aside class="sidebar" aria-label="站点导航">
+  <a class="brand" href="index.html" aria-label="CW-DepthGS 首页"><svg viewBox="0 0 32 32" aria-hidden="true"><g fill="none" stroke="#14130b" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round"><path d="M5 27.5V13.2L16 5l11 8.2v14.3"/><path d="M2.5 27.5h27"/><ellipse cx="20.2" cy="20" rx="4.8" ry="2.5" transform="rotate(22 20.2 20)"/><ellipse cx="16" cy="14.8" rx="3.3" ry="1.9"/></g><ellipse cx="11.6" cy="20.6" rx="4.4" ry="2.3" transform="rotate(-24 11.6 20.6)" fill="#566147"/></svg><span>CW-DepthGS</span></a>
+  <nav class="side-nav" aria-label="主导航"><a href="index.html"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9.5h13V10"/><path d="M10 19.5v-5h4v5"/></svg><span>总览<small>平台首页</small></span></a><a href="viewer.html"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/></svg><span>三维浏览<small>2 个展示模型</small></span></a><a href="review.html"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="14" rx="1.5"/><path d="M3.5 15.5l5-4.5 4 3.5 3-2.5 5 4"/><circle cx="16" cy="9.2" r="1.6"/></svg><span>人工复核<small>9 个测试视角</small></span></a><a href="archive.html" aria-current="page"><i class="pill"></i><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 8h17v11.5h-17z"/><path d="M2.5 4.5h19V8h-19z"/><path d="M9.5 12h5"/></svg><span>项目档案<small>采集至交付闭环</small></span></a><a href="research.html"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 19.5V10M10 19.5V5M15.5 19.5v-7M21 19.5H3"/></svg><span>研究结果<small>27 次正式训练</small></span></a></nav>
+  <a class="featured" href="review.html"><p class="caps">Featured view</p><img src="assets/cases/4906981/00007-render.png" alt="" width="480" height="347"><h3>一处屋檐，<br>二十四个视角。</h3><p>在照片上标注问题，验收结论可退回补拍或重新重建。</p><span class="more">开始复核 <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
+ </aside>
+ <div class="topbar"><label class="search"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.3-4.3"/></svg><input type="search" placeholder="搜索页面、建筑或功能…" aria-label="搜索页面，回车跳转"></label><button class="icon-btn" type="button" title="档案服务状态"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 16.5V11a6 6 0 0 1 12 0v5.5l1.5 1.5h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/></svg><span class="dot"></span></button><span class="avatar" title="评委">评</span></div>
+ <main class="stage" id="main">
+  <div class="arch-head reveal">
+   <div><p class="caps" id="access-mode">Project archive</p><h1 id="project-title">建筑项目档案</h1></div>
+   <button id="reload-project" class="btn" type="button" hidden><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4v6h6"/><path d="M4.6 15a8 8 0 1 0 1.8-8.3L4 10"/></svg>刷新项目</button>
+  </div>
+  <ol id="stage-bar" class="stage-bar reveal d1" aria-label="项目阶段"><li class="current"><span>1</span><strong>待采集</strong></li><li><span>2</span><strong>已采集</strong></li><li><span>3</span><strong>重建中</strong></li><li><span>4</span><strong>待复核</strong></li><li><span>5</span><strong>已交付</strong></li></ol>
+  <div class="tabs reveal d2" role="tablist" aria-label="档案分区"><button type="button" role="tab" data-pane="connect" aria-selected="true">连接与项目</button><button type="button" role="tab" data-pane="info" aria-selected="false" disabled>项目资料</button><button type="button" role="tab" data-pane="capture" aria-selected="false" disabled>采集管理</button><button type="button" role="tab" data-pane="result" aria-selected="false" disabled>重建成果</button><button type="button" role="tab" data-pane="review" aria-selected="false" disabled>复核交付</button><button type="button" role="tab" data-pane="history" aria-selected="false" disabled>修改记录</button></div>
+  <p id="cloud-message" class="cloud-message" role="status" aria-live="polite"></p>
+  <div class="arch-body scroll reveal d3">
+   <div class="pane" data-pane="connect"><section id="connection-panel" class="archive-section">
+  <h2>连接项目服务</h2><p id="connection-help">演示服务地址已填入，管理员输入管理密钥即可连接。查看人员请使用项目的只读分享链接，无需填写密钥。演示服务需保持服务器在线；临时地址更换后需更新分享链接。</p>
+  <form id="connect-form" class="archive-form"><label>项目服务地址<input id="api-base" type="url" placeholder="https://api.example.com" required></label><label>管理密钥<input id="admin-key" type="password" autocomplete="off" placeholder="仅项目管理员填写" required></label><button type="submit">连接服务</button></form>
+ </section><section id="project-list-panel" class="archive-section" hidden>
   <div class="section-tools"><h2>项目列表</h2><button id="disconnect" type="button">断开服务</button></div>
   <div id="project-list" class="project-list"></div>
   <details><summary>新建建筑档案</summary><form id="create-form" class="archive-form"><label>建筑名称<input id="new-name" maxlength="120" required></label><label>采集日期<input id="new-date" type="date"></label><label class="wide">项目说明<textarea id="new-description" rows="3" maxlength="2000"></textarea></label><button type="submit">建立档案</button></form></details>
- </section>
- <section id="project-panel" class="archive-section" hidden>
-  <div class="section-tools"><div><p id="access-mode" class="eyebrow"></p><h2 id="project-title"></h2></div><button id="reload-project" type="button">刷新项目</button></div>
-  <form id="metadata-form" class="archive-form"><label>建筑名称<input id="project-name" maxlength="120" required></label><label>采集日期<input id="project-date" type="date"></label><label class="wide">项目说明<textarea id="project-description" rows="3" maxlength="2000"></textarea></label><label class="edit-only">记录人<input id="actor" maxlength="80" placeholder="填写你的姓名或岗位" value="项目成员" required></label><button class="edit-only" type="submit">保存资料</button></form>
-  <p id="project-version" class="minor"></p>
-  <nav class="workflow-nav" aria-label="项目工作流"><a href="#capture-section">采集管理</a><a href="#reconstruction-section">重建成果</a><a href="#review-section">复核交付</a></nav>
-  <ol id="workflow-status" class="workflow-status" aria-label="项目进度"></ol>
-  <div class="archive-actions"><button id="download-record" type="button">下载档案JSON</button><button id="print-record" type="button">打印复核记录</button><button id="share-project" class="edit-only" type="button">生成只读链接</button><button id="edit-link" class="edit-only" type="button" hidden>查看编辑链接</button></div>
-  <div id="share-result" hidden><label id="share-label" for="share-url">分享链接</label><input id="share-url" type="text" readonly><p id="share-help" class="minor"></p><button id="copy-share" type="button">复制链接</button></div>
-  <section id="capture-section" class="workflow-section">
-   <div class="workflow-heading"><div><span>01</span><h3>采集管理</h3></div><p>建立可追踪的24视角采集批次，上传后执行基础质量检查。</p></div>
-   <form id="capture-form" class="archive-form edit-only"><label>目标视角数<input id="expected-views" type="number" min="1" max="200" value="24" required></label><label>采集地点<input id="capture-location" maxlength="240"></label><label>采集负责人<input id="capture-operator" maxlength="80"></label><label>人工确认<select id="capture-confirmed"><option value="false">尚未确认覆盖情况</option><option value="true">已人工确认采集批次</option></select></label><label class="wide">现场说明<textarea id="capture-notes" rows="3" maxlength="2000" placeholder="记录遮挡、拍摄受限、天气等情况"></textarea></label><button type="submit">保存采集任务</button></form>
-   <div class="capture-summary"><div><strong id="capture-count">—</strong><span>已上传照片</span></div><div><strong id="capture-warnings">0</strong><span>需人工检查</span></div><div><strong id="capture-ready">未完成</strong><span>采集确认</span></div></div>
-   <form id="upload-form" class="archive-form edit-only"><label>资料类型<select id="asset-kind"><option value="photo">采集照片</option><option value="model">三维高斯模型（.splat）</option></select></label><label>选择文件<input id="asset-file" type="file" accept="image/jpeg,image/png,image/webp" required></label><button type="submit">上传到项目</button><p class="wide minor">系统检查照片的分辨率、亮度、清晰度和重复情况，复核人员结合拍摄范围确认三维覆盖。模型支持标准.splat，单个不超过100MB。</p></form>
-   <div class="archive-actions edit-only"><button id="download-task" type="button">导出重建任务包</button><span class="minor">任务包包含采集清单、照片、训练配置和结果清单模板。</span></div>
-  </section>
-  <h3>项目资料</h3><div id="asset-list" class="asset-list"></div>
-
-  <section id="reconstruction-section" class="workflow-section">
-   <div class="workflow-heading"><div><span>02</span><h3>重建成果</h3></div><p>关联离线GPU训练生成的模型、指标、配置和文件校验值。</p></div>
-   <form id="result-form" class="archive-form edit-only"><label class="wide">导入结果清单<input id="result-manifest" type="file" accept="application/json,.json"></label><label>版本号<input id="result-version" value="v1" maxlength="40" required></label><label>方法<input id="result-method" value="CW-DepthGS" maxlength="120" required></label><label>关联模型<select id="result-model"><option value="">暂不关联模型</option></select></label><label>训练视角<input id="result-views" type="number" min="1" max="200" value="24" required></label><label>迭代次数<input id="result-iterations" type="number" min="1" max="1000000" value="7000" required></label><label>PSNR<input id="result-psnr" type="number" step="any"></label><label>SSIM<input id="result-ssim" type="number" step="any"></label><label>LPIPS<input id="result-lpips" type="number" step="any"></label><label>训练耗时（秒）<input id="result-seconds" type="number" min="0" step="any"></label><label>训练硬件<input id="result-hardware" maxlength="160"></label><label>配置版本<input id="result-config" maxlength="120" value="cw_depthgs_final"></label><label class="wide">模型SHA-256<input id="result-sha" pattern="[a-f0-9]{64}" maxlength="64"></label><button type="submit">登记重建版本</button></form>
+ </section></div>
+   <div id="project-panel" hidden>
+    <div class="pane" data-pane="info"><form id="metadata-form" class="archive-form"><label>建筑名称<input id="project-name" maxlength="120" required></label><label>采集日期<input id="project-date" type="date"></label><label class="wide">项目说明<textarea id="project-description" rows="3" maxlength="2000"></textarea></label><label class="edit-only">记录人<input id="actor" maxlength="80" placeholder="填写你的姓名或岗位" value="项目成员" required></label><button class="edit-only" type="submit">保存资料</button></form><p id="project-version" class="minor"></p><div class="archive-actions"><button id="download-record" type="button">下载档案JSON</button><button id="print-record" type="button">打印复核记录</button><button id="share-project" class="edit-only" type="button">生成只读链接</button><button id="edit-link" class="edit-only" type="button" hidden>查看编辑链接</button></div><div id="share-result" hidden><label id="share-label" for="share-url">分享链接</label><input id="share-url" type="text" readonly><p id="share-help" class="minor"></p><button id="copy-share" type="button">复制链接</button></div></div>
+    <div class="pane" data-pane="capture"><section id="capture-section" class="workflow-section" aria-labelledby="capture-title">
+   <div class="workflow-head"><h3 id="capture-title"><span>01</span>采集管理</h3><p class="minor">建立可追踪的采集批次，上传后执行基础质量检查。</p></div>
+   <form id="capture-form" class="archive-form"><label>目标视角数<input id="capture-target" type="number" min="1" max="500" value="24" required></label><label>采集地点<input id="capture-location" maxlength="200"></label><label>采集负责人<input id="capture-operator" maxlength="80"></label><label>人工确认<select id="capture-confirmed"><option value="false">待确认采集批次</option><option value="true">已人工确认采集批次</option></select></label><label class="wide">现场说明<textarea id="capture-notes" rows="3" maxlength="2000" placeholder="遮挡、光照、无法到达的拍摄位置等"></textarea></label><button class="edit-only" type="submit">保存采集任务</button></form>
+   <div class="capture-stats"><div><strong id="stat-photos">0 / 24</strong><span>已上传照片</span></div><div><strong id="stat-flagged">0</strong><span>需人工检查</span></div><div><strong id="stat-confirmed">待确认</strong><span>采集确认</span></div></div>
+   <form id="upload-form" class="archive-form edit-only"><label>资料类型<select id="asset-kind"><option value="photo">采集照片</option><option value="model">三维高斯模型（.splat）</option></select></label><label>选择文件<input id="asset-file" type="file" accept="image/jpeg,image/png,image/webp" required></label><button type="submit">上传到项目</button><p class="wide minor">系统检查照片的分辨率、亮度、清晰度和重复情况，复核人员结合拍摄范围确认三维覆盖。照片支持JPG、PNG、WebP，单张不超过20MB；模型支持标准.splat，单个不超过100MB。</p></form>
+   <div class="archive-actions edit-only"><button id="export-task" type="button">导出重建任务包</button><span class="minor">任务包包含采集清单、照片、训练配置和结果清单模板。</span></div>
+   <h4>项目资料</h4><div id="asset-list" class="asset-list"></div>
+  </section></div>
+    <div class="pane" data-pane="result"><section id="result-section" class="workflow-section" aria-labelledby="result-title">
+   <div class="workflow-head"><h3 id="result-title"><span>02</span>重建成果</h3><p class="minor">关联离线GPU训练生成的模型、指标、配置和文件校验值。</p></div>
+   <form id="version-form" class="archive-form edit-only"><label class="wide">导入结果清单<input id="manifest-file" type="file" accept="application/json,.json"></label><label>版本号<input id="version-label" maxlength="40" pattern="[A-Za-z0-9._\-]+" placeholder="v1" required></label><label>方法<input id="version-method" maxlength="60" value="CW-DepthGS" required></label><label>关联模型<select id="version-model"><option value="">暂不关联模型</option></select></label><label>训练视角<input id="version-views" type="number" min="1" max="10000" value="24"></label><label>迭代次数<input id="version-iterations" type="number" min="1" value="7000"></label><label>PSNR<input id="version-psnr" type="number" step="any" min="0" max="100"></label><label>SSIM<input id="version-ssim" type="number" step="any" min="0" max="1"></label><label>LPIPS<input id="version-lpips" type="number" step="any" min="0" max="1"></label><label>训练耗时（秒）<input id="version-seconds" type="number" step="any" min="0"></label><label>训练硬件<input id="version-hardware" maxlength="80"></label><label>配置版本<input id="version-config" maxlength="80" value="cw_depthgs_final"></label><label class="wide">模型SHA-256<input id="version-sha" maxlength="64" pattern="[a-fA-F0-9]{64}" placeholder="关联已上传模型时可留空，由服务器计算并核对"></label><button type="submit">登记重建版本</button></form>
    <div id="version-list" class="version-list"></div>
-  </section>
-  <section id="review-section" class="workflow-section">
-   <div class="workflow-heading"><div><span>03</span><h3>复核交付</h3></div><p>在照片上记录问题，将处置建议连接到补拍、重建或验收。</p></div>
-  <p id="review-context" aria-live="polite"></p>
-  <label>选择当前项目的照片<select id="review-photo"></select></label>
-  <label>对照照片（从当前项目选择）<select id="comparison-photo"></select></label>
-  <p>在待复核照片上点击添加标注，对照照片用于查看差异。</p>
-  <div id="asset-area" hidden><h3 id="asset-title"></h3><p id="asset-loading" role="status"></p><div class="review-image-pair"><figure id="comparison-figure" hidden><figcaption>对照照片</figcaption><img id="comparison-image" style="width:100%" alt=""></figure><div id="cloud-image-stage" class="cloud-image-stage" tabindex="0" aria-label="照片标注区域，按Enter在中心添加标注" hidden><img id="asset-image" alt="当前项目照片"></div></div><div id="cloud-model" class="cloud-model" hidden></div><div class="archive-actions"><button id="add-note" class="edit-only" type="button">在中心添加标注</button><button id="reset-model" type="button" hidden>重置观察视角</button><button id="download-asset" type="button">下载原始文件</button></div></div>
-  <div class="note-columns"><div><h3>当前照片的复核记录</h3><p id="note-empty">选择照片后可查看对应备注。</p><ol id="cloud-notes" class="cloud-notes"></ol></div><form id="note-form" class="archive-form" hidden><h3 class="wide" id="note-heading">编辑标注</h3><label class="wide">复核说明<textarea id="note-text" rows="4" maxlength="2000" required></textarea></label><label>处理建议<select id="note-category"><option>模型局部缺陷</option><option>建议补拍</option><option>建议重新重建</option><option>已确认</option></select></label><label>状态<select id="note-status"><option>待复核</option><option>处理中</option><option>已解决</option><option>已验收</option></select></label><button type="submit">更新本次草稿</button></form></div>
-  <div class="archive-actions edit-only"><button id="save-notes" type="button">保存标注到服务器</button><button id="download-draft" type="button">下载本次草稿</button><span id="dirty-state" role="status">无未保存修改</span></div>
-   <form id="acceptance-form" class="archive-form edit-only"><label>验收状态<select id="acceptance-status"><option>待复核</option><option>处理中</option><option>已解决</option><option>已验收</option></select></label><label class="wide">验收结论<textarea id="acceptance-summary" rows="3" maxlength="2000" placeholder="记录本版本是否通过，或需要补拍、重新重建的范围"></textarea></label><button type="submit">保存验收结论</button></form>
-   <div id="acceptance-readonly" class="acceptance-readonly"></div>
-   <div class="analysis-panel"><div class="archive-actions"><button id="run-analysis" class="edit-only" type="button">生成AI项目分析</button><span class="minor">AI分析使用项目状态、质量指标、复核记录和验收结论。</span></div><div id="analysis-result" class="analysis-result" hidden></div></div>
-  </section>
-  <details><summary>修改记录</summary><p class="minor">记录人由项目成员填写；服务器记录操作时间和版本。</p><ol id="project-history" class="project-history"></ol></details>
- </section>
-</main>
-<footer><span>CW-DepthGS · 建筑项目档案</span><a href="index.html">返回展示首页</a></footer>
-<script src="service-config.js?v=20261027-tencent"></script><script type="module" src="archive.js?v=20261027-status-sync4"></script>
+  </section></div>
+    <div class="pane" data-pane="review"><section id="review-section" class="workflow-section" aria-labelledby="review-title">
+   <div class="workflow-head"><h3 id="review-title"><span>03</span>复核交付</h3><p class="minor">在照片上记录问题，将处置建议连接到补拍、重建或验收。</p></div>
+   <div class="archive-form"><label>选择当前项目的资料<select id="review-asset"></select></label><label>对照照片（从当前项目选择）<select id="compare-asset"><option value="">不显示对照照片</option></select></label></div>
+   <div id="asset-area" hidden><h4 id="asset-title"></h4><p id="asset-loading" role="status"></p><div id="review-pair" class="review-pair"><div id="cloud-image-stage" class="cloud-image-stage" tabindex="0" aria-label="照片标注区域，按Enter在中心添加标注" hidden><img id="asset-image" alt="当前项目照片"></div><div id="cloud-model" class="cloud-model" hidden></div><figure id="compare-figure" class="compare-figure" hidden><img id="compare-image" alt="对照照片"><figcaption id="compare-caption"></figcaption></figure></div><div class="archive-actions"><button id="add-note" class="edit-only" type="button">在中心添加标注</button><button id="reset-model" type="button" hidden>重置观察视角</button><button id="download-asset" type="button">下载原始文件</button></div></div>
+   <div class="note-columns"><div><h4>当前照片的复核记录</h4><p id="note-empty">选择照片后可查看对应备注。</p><ol id="cloud-notes" class="cloud-notes"></ol></div><form id="note-form" class="archive-form" hidden><h4 class="wide" id="note-heading">编辑标注</h4><label class="wide">复核说明<textarea id="note-text" rows="4" maxlength="2000" required></textarea></label><label>状态<select id="note-status"><option>待复核</option><option>已复核</option></select></label><button type="submit">更新本次草稿</button></form></div>
+   <div class="archive-actions edit-only"><button id="save-notes" type="button">保存标注到服务器</button><button id="download-draft" type="button">下载本次草稿</button><span id="dirty-state" role="status">无未保存修改</span></div>
+   <form id="acceptance-form" class="archive-form"><label>验收状态<select id="acceptance-status"><option>待复核</option><option>需补拍</option><option>需重新重建</option><option>验收通过</option></select></label><label>验收版本<select id="acceptance-version"><option value="">不指定版本</option></select></label><label class="wide">验收结论<textarea id="acceptance-conclusion" rows="3" maxlength="2000"></textarea></label><button class="edit-only" type="submit">保存验收结论</button></form>
+   <div id="acceptance-summary" class="acceptance-summary" hidden></div>
+   <div class="archive-actions"><button id="run-analysis" class="edit-only" type="button">生成AI项目分析</button><span id="analysis-help" class="minor">AI分析使用项目状态、质量指标、复核记录和验收结论，不上传照片和模型文件。</span></div>
+   <div id="analysis-box" class="analysis-box" hidden></div>
+  </section></div>
+    <div class="pane" data-pane="history"><details><summary>修改记录</summary><p class="minor">记录人由项目成员填写；服务器记录操作时间和版本。</p><ol id="project-history" class="project-history"></ol></details></div>
+   </div>
+  </div>
+ </main>
+ <aside class="panel scroll" id="panel" aria-label="详情">
+  <p class="caps" id="sum-caps">Local archive service</p>
+  <h1 id="sum-title" class="split-title">项目档案</h1>
+  <div class="tags" id="sum-tags"><span class="tag">FastAPI</span><span class="tag">SQLite</span><span class="tag">本机运行</span></div>
+  <p class="lede" id="sum-lede">按建筑登记采集批次和照片质量提示，关联离线训练的重建版本与指标，在照片上记录复核问题，形成验收结论后通过只读链接交付。</p>
+  <hr class="rule">
+  <h2 id="sum-h2">连接方式</h2>
+  <dl class="traits" id="sum-traits"><div><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="1.5"/><path d="M9.5 2.5v3.5M14.5 2.5v3.5M9.5 18v3.5M14.5 18v3.5M2.5 9.5H6M2.5 14.5H6M18 9.5h3.5M18 14.5h3.5"/></svg><dt>服务地址</dt><dd>127.0.0.1:8018</dd></div><div><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l7.5 3v5.5c0 4.2-3.2 7.7-7.5 8.5-4.3-.8-7.5-4.3-7.5-8.5V6.5z"/><path d="M8.8 12l2.3 2.3 4.2-4.3"/></svg><dt>管理密钥</dt><dd>reviewer-data/admin-key.txt</dd></div><div><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 8h17v11.5h-17z"/><path d="M2.5 4.5h19V8h-19z"/><path d="M9.5 12h5"/></svg><dt>数据目录</dt><dd>web-backend/reviewer-data</dd></div><div><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12s3.5-6.5 9.5-6.5 9.5 6.5 9.5 6.5-3.5 6.5-9.5 6.5S2.5 12 2.5 12z"/><circle cx="12" cy="12" r="2.8"/></svg><dt>只读链接</dt><dd>同一电脑验证</dd></div></dl>
+  <a class="closeup" id="sum-ai" href="#" data-pane-link="review"><img src="assets/cases/4906981/00007-reference.png" alt="" width="480" height="347"><div><h3>AI 项目分析</h3><p id="sum-ai-text">打开项目后，在“复核交付”中生成分析；不上传照片和模型文件。</p></div><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></a>
+ </aside>
+</div>
+<script src="atlas.js?v=20261027-atlas"></script>
+<script src="service-config.js?v=20261027"></script><script type="module" src="archive.js?v=20261027-atlas"></script>
 </body></html>

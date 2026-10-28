@@ -1,19 +1,25 @@
 {
-  "building": "4906981",
-  "format": "GaussianSplats3D KSplat 0.1",
-  "displayOnly": true,
-  "sourceModel": "formal_building_4906981_localmv_s0/point_cloud/iteration_7000/point_cloud.ply",
+  "source": "formal_building_4906981_localmv_s0/point_cloud/iteration_7000/point_cloud.ply",
   "sourceBytes": 839038604,
-  "sourceSha256": "57933817bdb13f6bdcfe5277a615b8e6cb6498ae50240813be732563bb99bb46",
-  "sourceGaussians": 3383214,
-  "retainedGaussians": 3383214,
-  "outputBytes": 81375332,
-  "outputSha256": "2287bcfe340581328a828b340238210a28d2406dde09ace1ab9f0ede5adf32fe",
-  "libraryVersion": "0.4.7",
-  "compressionLevel": 2,
+  "sourceSHA256": "57933817bdb13f6bdcfe5277a615b8e6cb6498ae50240813be732563bb99bb46",
+  "sourceCount": 3383214,
   "sourceSHDegree": 3,
   "outputSHDegree": 0,
+  "output": "building-4906981-full-sh0.ksplat",
+  "outputBytes": 81375332,
+  "outputSHA256": "2287bcfe340581328a828b340238210a28d2406dde09ace1ab9f0ede5adf32fe",
+  "outputCount": 3383214,
+  "format": "GaussianSplats3D KSplat 0.1",
+  "libraryVersion": "0.4.7",
+  "compressionLevel": 2,
   "alphaRemovalThreshold": 0,
+  "sceneCenter": [
+    0,
+    0,
+    0
+  ],
+  "bucketBlockSize": 5,
+  "bucketSize": 256,
   "chunkSize": 250000,
   "sectionCount": 14,
   "sectionCounts": [
@@ -32,22 +38,10 @@
     250000,
     133214
   ],
-  "algorithm": {
-    "selection": "All source Gaussians retained; no size or opacity ranking",
-    "position": "Bucket-relative uint16",
-    "scaleAndRotation": "float16",
-    "colorAndOpacity": "RGBA8, SH0/DC color only",
-    "bucketBlockSize": 5,
-    "bucketSize": 256
-  },
-  "validation": {
-    "decodedGaussians": 3383214,
-    "allDecodedValuesFinite": true,
-    "zeroScaleComponents": 170,
-    "totalScaleComponents": 10149642,
-    "allZeroScaleGaussians": 0
-  },
-  "note": "保留全部高斯点的网页转换版；几何经过量化，颜色使用SH0。未重新训练，正式实验指标仍对应原始模型。",
+  "validatedFiniteCenterSamples": 428,
+  "node": "v22.11.0",
+  "geometryDescription": "All source Gaussians retained; official API bucket-relative uint16 positions, float16 scales/quaternions, RGBA8 SH0 color/opacity.",
+  "notes": "CPU-only chunked official PLY parser and KSplat compressor. Independent official section payloads joined using official header writer; full count and decoded centers validated. Source PLY untouched. SH3 reduced to SH0; compressed geometry is not lossless.",
   "initialView": {
     "position": [
       -2.1528259800822354,
@@ -65,8 +59,6 @@
       -0.6778956112520607
     ],
     "fov": 58.016875282077656,
-    "sourceCameraId": 28,
-    "sourceImage": "DJI_20241217094538_0025_D.JPG",
-    "derivation": "COLMAP camera-to-world rotation: forward=column2, up=-column1; target distance projected from retained-point median"
+    "sourceCameraId": 28
   }
 }
