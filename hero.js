@@ -126,15 +126,61 @@ export async function initHero(canvas, {onReady, onProgress, onAngle} = {}) {
   const camera = new THREE.PerspectiveCamera(36, 1, 0.05, 90);
   const radius = Math.max(hi[0] - lo[0], hi[2] - lo[2]);
   const view = {yaw: 0.6, pitch: 0.5, zoom: 1, auto: !reduce, tyaw: 0.6, tpitch: 0.5, tzoom: 1};
-  let drag = null;
-  canvas.addEventListener('pointerdown', e => { drag = {x: e.clientX, y: e.clientY, yaw: view.tyaw, pitch: view.tpitch}; canvas.setPointerCapture(e.pointerId); });
-  canvas.addEventListener('pointermove', e => {
-    if (!drag) return;
-    view.tyaw = drag.yaw - (e.clientX - drag.x) * 0.006;
-    view.tpitch = Math.max(0.12, Math.min(1.25, drag.pitch + (e.clientY - drag.y) * 0.004));
+  const setZoom = z => { view.tzoom = Math.max(0.55, Math.min(1.8, z)); };
+  const setPitch = p => { view.tpitch = Math.max(0.12, Math.min(1.25, p)); };
+  // Auto-spin waits while any gesture is in progress and briefly after it ends.
+  let drag = null, holdUntil = 0;
+  const hold = () => { holdUntil = performance.now() + 1500; };
+  const touches = new Map();
+  const spread = () => { const [a, b] = [...touches.values()]; return Math.hypot(a.x - b.x, a.y - b.y) || 1; };
+  canvas.addEventListener('pointerdown', e => {
+    touches.set(e.pointerId, {x: e.clientX, y: e.clientY});
+    canvas.setPointerCapture(e.pointerId);
+    // A second finger on a touchscreen turns the drag into a pinch.
+    drag = touches.size === 2 ? {pinch: spread(), zoom: view.tzoom} : {x: e.clientX, y: e.clientY, yaw: view.tyaw, pitch: view.tpitch};
   });
-  canvas.addEventListener('pointerup', () => { drag = null; });
-  canvas.addEventListener('wheel', e => { e.preventDefault(); view.tzoom = Math.max(0.55, Math.min(1.8, view.tzoom * (e.deltaY > 0 ? 1.08 : 0.93))); }, {passive: false});
+  canvas.addEventListener('pointermove', e => {
+    if (!drag || !touches.has(e.pointerId)) return;
+    touches.set(e.pointerId, {x: e.clientX, y: e.clientY});
+    if (drag.pinch) { if (touches.size === 2) setZoom(drag.zoom * drag.pinch / spread()); return; }
+    view.tyaw = drag.yaw - (e.clientX - drag.x) * 0.006;
+    setPitch(drag.pitch + (e.clientY - drag.y) * 0.004);
+  });
+  const release = e => {
+    touches.delete(e.pointerId);
+    hold();
+    const [rest] = touches.values();
+    drag = rest ? {x: rest.x, y: rest.y, yaw: view.tyaw, pitch: view.tpitch} : null;
+  };
+  canvas.addEventListener('pointerup', release);
+  canvas.addEventListener('pointercancel', release);
+  // Trackpads send many small pixel deltas (often fractional, often with deltaX); a mouse wheel
+  // sends coarse vertical notches. A gesture keeps its classification until the stream pauses.
+  let padUntil = 0;
+  canvas.addEventListener('wheel', e => {
+    e.preventDefault();
+    hold();
+    const now = performance.now(), scale = e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? canvas.clientHeight : 1;
+    const dx = e.deltaX * scale, dy = e.deltaY * scale;
+    if (e.ctrlKey) { setZoom(view.tzoom * Math.exp(Math.max(-25, Math.min(25, dy)) * 0.01)); return; } // pinch on Chrome, Edge, Firefox
+    const pad = now < padUntil || (e.deltaMode === 0 && (dx !== 0 || !Number.isInteger(dy) || Math.abs(dy) < 50));
+    if (pad) {
+      padUntil = now + 160;
+      view.tyaw += dx * 0.004;
+      setPitch(view.tpitch - dy * 0.003);
+    } else setZoom(view.tzoom * (dy > 0 ? 1.08 : 0.93));
+  }, {passive: false});
+  // Safari reports trackpad pinch and two-finger rotation as gesture events instead of ctrl+wheel.
+  let gesture = null;
+  canvas.addEventListener('gesturestart', e => { e.preventDefault(); gesture = {zoom: view.tzoom, yaw: view.tyaw}; });
+  canvas.addEventListener('gesturechange', e => {
+    if (!gesture) return;
+    e.preventDefault();
+    hold();
+    setZoom(gesture.zoom / e.scale);
+    view.tyaw = gesture.yaw - e.rotation * Math.PI / 180;
+  });
+  canvas.addEventListener('gestureend', e => { e.preventDefault(); gesture = null; });
   function resize() {
     const w = canvas.clientWidth, h = canvas.clientHeight;
     if (!w || !h) return;
@@ -155,7 +201,7 @@ export async function initHero(canvas, {onReady, onProgress, onAngle} = {}) {
     if (born === null) born = now;
     uniforms.uTime.value += dt;
     if (!reduce) uniforms.uProgress.value = Math.min(1, (now - born) / 3200);
-    if (view.auto && !drag) view.tyaw += dt * 0.12;
+    if (view.auto && !drag && !gesture && now > holdUntil) view.tyaw += dt * 0.12;
     view.yaw += (view.tyaw - view.yaw) * 0.08; view.pitch += (view.tpitch - view.pitch) * 0.08; view.zoom += (view.tzoom - view.zoom) * 0.08;
     // Step back on tall, narrow stages (tablets, phones) so the whole building stays in frame.
     const dist = radius * 2.05 * view.zoom * Math.max(1, 0.95 / camera.aspect);
@@ -167,7 +213,7 @@ export async function initHero(canvas, {onReady, onProgress, onAngle} = {}) {
   frame = requestAnimationFrame(tick);
   onReady?.(data);
   return {
-    zoom(f) { view.tzoom = Math.max(0.55, Math.min(1.8, view.tzoom * f)); },
+    zoom(f) { setZoom(view.tzoom * f); },
     rotate(deg) { view.tyaw += deg * Math.PI / 180; },
     toggleAuto() { view.auto = !view.auto; return view.auto; },
     reset() { view.tyaw = 0.6; view.tpitch = 0.5; view.tzoom = 1; },

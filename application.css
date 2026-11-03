@@ -133,11 +133,11 @@ p{margin:0 0 12px}
 .specimen canvas{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:grab;touch-action:none}
 .specimen canvas:active{cursor:grabbing}
 .specimen .ground{position:absolute;left:50%;bottom:118px;width:min(62%,560px);height:44px;transform:translateX(-50%);background:radial-gradient(ellipse at center,rgba(187,184,176,.95),rgba(187,184,176,.35) 45%,transparent 72%);filter:blur(4px);pointer-events:none}
-.specimen .photo{position:absolute;left:50%;top:50%;width:min(64%,620px);transform:translate(-50%,-56%);border-radius:6px;box-shadow:0 40px 60px -40px rgba(20,19,11,.55);opacity:0;transition:opacity .6s}
+.specimen .photo{position:absolute;left:50%;top:50%;width:min(64%,620px);transform:translate(-50%,-56%);border-radius:6px;box-shadow:0 40px 60px -40px rgba(20,19,11,.55);opacity:0;transition:opacity .6s;pointer-events:none}
 .home[data-building]:not([data-building="4906981"]) .specimen .photo{opacity:1}
 .home[data-building]:not([data-building="4906981"]) .specimen canvas{opacity:0;pointer-events:none}
 .specimen canvas{transition:opacity .6s}
-.load-note{position:absolute;z-index:2;left:50%;top:50%;transform:translate(-50%,-50%);color:var(--muted);font:italic 17px/1 var(--serif);transition:opacity .6s}
+.load-note{position:absolute;z-index:2;left:50%;top:50%;transform:translate(-50%,-50%);color:var(--muted);font:italic 17px/1 var(--serif);transition:opacity .6s;pointer-events:none}
 .load-note.done{opacity:0}
 
 @media(max-width:1180px){:root{--panel:340px;--side:220px}.brand{font-size:23px}}

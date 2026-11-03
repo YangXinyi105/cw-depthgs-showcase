@@ -5,7 +5,7 @@
 <meta name="description" content="面向既有建筑数字化建档的稀疏视角三维高斯重建与可视化复核平台：24张图像训练可实时浏览的建筑场景，重建成果接入采集、复核、验收与只读交付闭环。">
 <meta name="theme-color" content="#f8f5ea">
 <link rel="preload" href="assets/fonts/eb-garamond.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="fonts.css?v=20261027-atlas"><link rel="stylesheet" href="application.css?v=20261027-atlas">
+<link rel="stylesheet" href="fonts.css?v=20261027-atlas"><link rel="stylesheet" href="application.css?v=20261103-trackpad">
 <link rel="icon" type="image/svg+xml" href="assets/logo-mark.svg"></head>
 <body class="home">
 <a class="skip" href="#main">跳到主要内容</a>
@@ -23,7 +23,7 @@
    <button class="thumb" type="button" data-building="pilot" aria-pressed="false"><img src="assets/cases/pilot/00006-render.png" alt="" width="480" height="348"><b>pilot</b><i>独立验证</i></button>
   </div>
   <div class="specimen">
-   <canvas id="hero-canvas" aria-label="建筑4906981重建点云：拖动旋转，滚轮缩放"></canvas>
+   <canvas id="hero-canvas" aria-label="建筑4906981重建点云：拖动或双指滑动旋转，双指捏合或滚轮缩放"></canvas>
    <img class="photo" id="specimen-photo" alt="" width="480" height="347">
    <div class="ground"></div>
    <p class="load-note" id="load-note">Loading point cloud · <span id="loader-count">0</span>%</p>
@@ -52,5 +52,5 @@
  </aside>
 </div>
 <script src="atlas.js?v=20261027-atlas"></script>
-<script type="module" src="home.js?v=20261103-stream"></script>
+<script type="module" src="home.js?v=20261103-trackpad"></script>
 </body></html>
