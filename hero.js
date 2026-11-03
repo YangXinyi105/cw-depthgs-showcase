@@ -50,9 +50,20 @@ async function download(url, onProgress) {
   const response = await fetch(url);
   if (!response.ok) throw Error('point cloud unavailable');
   const total = Number(response.headers.get('content-length')) || 0, reader = response.body?.getReader();
-  if (!reader || !total) { onProgress?.(1); return response.arrayBuffer(); }
-  const out = new Uint8Array(total);
-  for (let got = 0; ;) { const {done, value} = await reader.read(); if (done) break; out.set(value, got); got += value.length; onProgress?.(got / total); }
+  if (!reader) { const buffer = await response.arrayBuffer(); onProgress?.(1); return buffer; }
+  const chunks = [];
+  let got = 0;
+  for (;;) {
+    const {done, value} = await reader.read();
+    if (done) break;
+    chunks.push(value);
+    got += value.byteLength;
+    if (total) onProgress?.(Math.min(got / total, 0.99));
+  }
+  const out = new Uint8Array(got);
+  let offset = 0;
+  for (const chunk of chunks) { out.set(chunk, offset); offset += chunk.byteLength; }
+  onProgress?.(1);
   return out.buffer;
 }
 

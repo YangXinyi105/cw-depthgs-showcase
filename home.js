@@ -1,5 +1,5 @@
 // Home: building tabs drive the specimen stage and the right-hand panel.
-import {initHero} from './hero.js?v=20261027-atlas';
+import {initHero} from './hero.js?v=20261103-stream';
 
 const $ = id => document.getElementById(id);
 const ICON = {
