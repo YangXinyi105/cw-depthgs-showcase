@@ -79,13 +79,8 @@ function decode(buffer) {
   return {count, position, rgba, size, lo, hi};
 }
 
-export async function initHero(canvas, {onReady, onProgress, onAngle} = {}) {
-  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const renderer = new THREE.WebGLRenderer({canvas, antialias: false, alpha: true, premultipliedAlpha: false, powerPreference: 'high-performance'});
-  renderer.setPixelRatio(Math.min(devicePixelRatio, 1.75));
-  renderer.setClearColor(0x000000, 0);
-  const data = decode(await download('assets/hero-points.bin', onProgress));
-  const {count, position, rgba, size, lo, hi} = data;
+// Point files come from scripts/build_hero_points.py (any .splat or 3DGS .ply).
+function buildCloud({count, position, rgba, size, lo, hi}, material) {
   const color = new Float32Array(count * 4), start = new Float32Array(count * 3), delay = new Float32Array(count), sizes = new Float32Array(count);
   for (let i = 0; i < count; i++) {
     for (let k = 0; k < 3; k++) color[i * 4 + k] = Math.min(1, (rgba[i * 4 + k] / 255) * 0.92);
@@ -103,14 +98,39 @@ export async function initHero(canvas, {onReady, onProgress, onAngle} = {}) {
   geometry.setAttribute('aColor', new THREE.BufferAttribute(color, 4));
   geometry.setAttribute('aSize', new THREE.BufferAttribute(sizes, 1));
   geometry.setAttribute('aDelay', new THREE.BufferAttribute(delay, 1));
+  const points = new THREE.Points(geometry, material);
+  points.position.set(-(lo[0] + hi[0]) / 2, -(lo[1] + (hi[1] - lo[1]) * 0.32), -(lo[2] + hi[2]) / 2);
+  points.frustumCulled = false;
+  return points;
+}
+
+export async function initHero(canvas, {url = 'assets/hero-points.bin', onReady, onProgress, onAngle} = {}) {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const renderer = new THREE.WebGLRenderer({canvas, antialias: false, alpha: true, premultipliedAlpha: false, powerPreference: 'high-performance'});
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 1.75));
+  renderer.setClearColor(0x000000, 0);
   const uniforms = {uTime: {value: 0}, uProgress: {value: reduce ? 1 : 0}, uScale: {value: 1}};
   const material = new THREE.ShaderMaterial({vertexShader: VERTEX, fragmentShader: FRAGMENT, uniforms, transparent: true, depthWrite: false});
-  const points = new THREE.Points(geometry, material);
-  const centre = [(lo[0] + hi[0]) / 2, lo[1] + (hi[1] - lo[1]) * 0.32, (lo[2] + hi[2]) / 2];
-  points.position.set(-centre[0], -centre[1], -centre[2]);
-  points.frustumCulled = false;
   const scene = new THREE.Scene();
-  scene.add(points);
+  let points = null, radius = 1, born = null, loadSeq = 0, shown = '';
+  const cache = new Map();
+  // Swap in another cloud and replay the bottom-up assembly.
+  function show(data, src) {
+    shown = src;
+    if (points) { scene.remove(points); points.geometry.dispose(); }
+    points = buildCloud(data, material);
+    scene.add(points);
+    radius = Math.max(data.hi[0] - data.lo[0], data.hi[2] - data.lo[2]);
+    born = null;
+    if (!reduce) uniforms.uProgress.value = 0;
+  }
+  async function fetchCloud(src, progress) {
+    if (!cache.has(src)) cache.set(src, download(src, progress).then(decode).catch(error => { cache.delete(src); throw error; }));
+    else progress?.(1);
+    return cache.get(src);
+  }
+  const data = await fetchCloud(url, onProgress);
+  show(data, url);
   const dustCount = 900, dustPos = new Float32Array(dustCount * 3), dustSeed = new Float32Array(dustCount);
   for (let i = 0; i < dustCount; i++) {
     dustPos[i * 3] = (Math.random() - 0.5) * 30; dustPos[i * 3 + 1] = (Math.random() - 0.35) * 14; dustPos[i * 3 + 2] = (Math.random() - 0.5) * 30; dustSeed[i] = Math.random();
@@ -124,7 +144,6 @@ export async function initHero(canvas, {onReady, onProgress, onAngle} = {}) {
   scene.add(dust);
 
   const camera = new THREE.PerspectiveCamera(36, 1, 0.05, 90);
-  const radius = Math.max(hi[0] - lo[0], hi[2] - lo[2]);
   const view = {yaw: 0.6, pitch: 0.5, zoom: 1, auto: !reduce, tyaw: 0.6, tpitch: 0.5, tzoom: 1};
   const setZoom = z => { view.tzoom = Math.max(0.55, Math.min(1.8, z)); };
   const setPitch = p => { view.tpitch = Math.max(0.12, Math.min(1.25, p)); };
@@ -192,7 +211,7 @@ export async function initHero(canvas, {onReady, onProgress, onAngle} = {}) {
   new ResizeObserver(resize).observe(canvas);
   resize();
 
-  let visible = true, last = performance.now(), born = null, frame = 0;
+  let visible = true, last = performance.now(), frame = 0;
   new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; }).observe(canvas);
   function tick(now) {
     frame = requestAnimationFrame(tick);
@@ -217,6 +236,15 @@ export async function initHero(canvas, {onReady, onProgress, onAngle} = {}) {
     rotate(deg) { view.tyaw += deg * Math.PI / 180; },
     toggleAuto() { view.auto = !view.auto; return view.auto; },
     reset() { view.tyaw = 0.6; view.tpitch = 0.5; view.tzoom = 1; },
-    dispose() { cancelAnimationFrame(frame); geometry.dispose(); material.dispose(); dustGeometry.dispose(); dustMaterial.dispose(); renderer.dispose(); },
+    // Resolves true once the cloud is shown, false if a newer load replaced it first.
+    async load(src, progress) {
+      const seq = ++loadSeq;
+      if (src === shown) { progress?.(1); return true; }
+      const next = await fetchCloud(src, progress);
+      if (seq !== loadSeq) return false;
+      show(next, src);
+      return true;
+    },
+    dispose() { cancelAnimationFrame(frame); points?.geometry.dispose(); material.dispose(); dustGeometry.dispose(); dustMaterial.dispose(); renderer.dispose(); },
   };
 }

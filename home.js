@@ -1,5 +1,5 @@
 // Home: building tabs drive the specimen stage and the right-hand panel.
-import {initHero} from './hero.js?v=20261103-trackpad';
+import {initHero} from './hero.js?v=20261103-clouds';
 
 const $ = id => document.getElementById(id);
 const ICON = {
@@ -10,12 +10,13 @@ const ICON = {
   points: '<circle cx="6" cy="8" r="1.6"/><circle cx="15" cy="6" r="2"/><circle cx="11" cy="15" r="2.4"/><circle cx="18.5" cy="15.5" r="1.4"/>',
 };
 // Three-seed means and paired bootstrap results from the technical report (table 1 and section 5.3).
+// `points` is a file from scripts/build_hero_points.py; buildings without one show `photo` instead.
 const BUILDINGS = {
   '4906981': {
     family: 'TUM2TWIN · Independent validation', tags: ['24 视角', 'CW-DepthGS', '+0.40 dB'],
     lede: 'TUM2TWIN公开数据中的一栋多层建筑，用于独立验证。仅用24张训练图像，CW-DepthGS的三种子平均PSNR较RGB-only提高0.3994 dB，配对Bootstrap 95%区间为[0.3048, 0.4953]。',
     metrics: [['target', 'PSNR', '19.8767 dB'], ['trend', 'ΔPSNR · 对RGB-only', '+0.3994 dB'], ['trend', 'ΔPSNR · 对固定深度', '+0.1175 dB'], ['layers', 'SSIM', '0.6385'], ['eye', 'LPIPS', '0.3681'], ['points', '完整模型高斯点', '3,383,214']],
-    closeup: 'assets/cases/4906981/00012-render.png',
+    closeup: 'assets/cases/4906981/00012-render.png', points: 'assets/hero-points.bin',
   },
   '4959323': {
     family: 'TUM2TWIN · Method selection', tags: ['调参建筑', '24 视角', '+0.16 dB'],
@@ -31,9 +32,11 @@ const BUILDINGS = {
   },
 };
 
+let hero = null, heroFailed = false; // hero stays null while the first cloud loads
 function fill(id, animate) {
   const b = BUILDINGS[id];
   document.body.dataset.building = id;
+  showCloud(id);
   $('b-family').textContent = b.family;
   $('b-name').textContent = id;
   $('b-tags').replaceChildren(...b.tags.map(t => Object.assign(document.createElement('span'), {className: 'tag', textContent: t})));
@@ -52,21 +55,35 @@ function fill(id, animate) {
 
 document.querySelectorAll('.thumb').forEach(t => t.addEventListener('click', () => {
   const go = () => fill(t.dataset.building, !document.startViewTransition);
-  if (document.startViewTransition) document.startViewTransition(go); else go();
+  // A quick second click skips the running transition; that rejection is expected.
+  if (document.startViewTransition) document.startViewTransition(go).ready.catch(() => {}); else go();
 }));
 fill('4906981', false);
 
-const note = $('load-note'), count = $('loader-count');
-let hero = null;
+const note = $('load-note'), count = $('loader-count'), progress = f => { count.textContent = String(Math.round(f * 100)); };
+// The stage shows the selected building's point cloud, or its render when there is none.
+async function showCloud(id) {
+  const {points, photo} = BUILDINGS[id];
+  document.body.dataset.cloud = points && !heroFailed ? 'on' : 'off';
+  if (!photo) $('specimen-photo').src = 'assets/cases/' + id + '/00007-render.png';
+  if (!points || !hero) return;
+  $('hero-canvas').setAttribute('aria-label', '建筑' + id + '重建点云：拖动或双指滑动旋转，双指捏合或滚轮缩放');
+  note.classList.remove('done');
+  try { await hero.load(points, progress); } catch { if (document.body.dataset.building === id) document.body.dataset.cloud = 'off'; }
+  if (document.body.dataset.building === id) note.classList.add('done');
+}
 try {
   hero = await initHero($('hero-canvas'), {
-    onProgress: f => { count.textContent = String(Math.round(f * 100)); },
+    url: BUILDINGS['4906981'].points,
+    onProgress: progress,
     onReady: () => note.classList.add('done'),
     onAngle: a => { $('angle').textContent = Math.round(a) + '°'; },
   });
+  showCloud(document.body.dataset.building);
 } catch (error) {
+  heroFailed = true;
   note.textContent = '当前浏览器无法显示点云，已显示渲染图。';
-  document.body.dataset.building = 'pilot';
+  document.body.dataset.cloud = 'off';
   $('specimen-photo').src = 'assets/cases/4906981/00007-render.png';
 }
 $('z-in').onclick = () => hero?.zoom(0.85);
