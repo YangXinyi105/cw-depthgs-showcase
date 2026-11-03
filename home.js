@@ -1,5 +1,6 @@
-// Home: building tabs drive the specimen stage and the right-hand panel.
-import {initHero} from './hero.js?v=20261103-clouds';
+// Home: building tabs drive the specimen stage and the right-hand panel; visitors can add their own model.
+import {initHero} from './hero.js?v=20261103-upload';
+import {encode} from './cloud-convert.js?v=20261103-upload';
 
 const $ = id => document.getElementById(id);
 const ICON = {
@@ -33,19 +34,21 @@ const BUILDINGS = {
 };
 
 let hero = null, heroFailed = false; // hero stays null while the first cloud loads
-function fill(id, animate) {
-  const b = BUILDINGS[id];
-  document.body.dataset.building = id;
-  showCloud(id);
-  $('b-family').textContent = b.family;
-  $('b-name').textContent = id;
-  $('b-tags').replaceChildren(...b.tags.map(t => Object.assign(document.createElement('span'), {className: 'tag', textContent: t})));
-  $('b-lede').textContent = b.lede;
-  $('b-traits').innerHTML = b.metrics.map(([ico, label, value]) =>
-    `<div><svg class="ico" viewBox="0 0 24 24" aria-hidden="true">${ICON[ico]}</svg><dt>${label}</dt><dd>${value}</dd></div>`).join('');
-  $('b-closeup').querySelector('img').src = b.closeup;
-  if (b.photo) $('specimen-photo').src = b.photo;
-  document.querySelectorAll('.thumb').forEach(t => t.setAttribute('aria-pressed', String(t.dataset.building === id)));
+function renderPanel({family, name, tags, lede, metrics}, animate, local) {
+  $('b-family').textContent = family;
+  $('b-name').textContent = name;
+  $('b-tags').replaceChildren(...tags.map(t => Object.assign(document.createElement('span'), {className: 'tag', textContent: t})));
+  $('b-lede').textContent = lede;
+  $('b-traits').replaceChildren(...metrics.map(([ico, label, value]) => {
+    const row = document.createElement('div');
+    row.innerHTML = `<svg class="ico" viewBox="0 0 24 24" aria-hidden="true">${ICON[ico]}</svg><dt></dt><dd></dd>`;
+    row.querySelector('dt').textContent = label;
+    row.querySelector('dd').textContent = value;
+    return row;
+  }));
+  $('b-local').hidden = !local;
+  $('b-exp').hidden = $('b-closeup').hidden = !!local;
+  document.querySelectorAll('.thumb').forEach(t => t.setAttribute('aria-pressed', String(local ? t.id === 'upload-model' : t.dataset.building === name)));
   if (animate) {
     const panel = $('panel');
     panel.animate([{opacity: 0, transform: 'translateX(18px)'}, {opacity: 1, transform: 'none'}], {duration: 520, easing: 'cubic-bezier(.2,.75,.2,1)'});
@@ -53,7 +56,16 @@ function fill(id, animate) {
   }
 }
 
-document.querySelectorAll('.thumb').forEach(t => t.addEventListener('click', () => {
+function fill(id, animate) {
+  const b = BUILDINGS[id];
+  document.body.dataset.building = id;
+  showCloud(id);
+  renderPanel({...b, name: id}, animate, false);
+  $('b-closeup').querySelector('img').src = b.closeup;
+  if (b.photo) $('specimen-photo').src = b.photo;
+}
+
+document.querySelectorAll('.thumb[data-building]').forEach(t => t.addEventListener('click', () => {
   const go = () => fill(t.dataset.building, !document.startViewTransition);
   // A quick second click skips the running transition; that rejection is expected.
   if (document.startViewTransition) document.startViewTransition(go).ready.catch(() => {}); else go();
@@ -68,6 +80,7 @@ async function showCloud(id) {
   if (!photo) $('specimen-photo').src = 'assets/cases/' + id + '/00007-render.png';
   if (!points || !hero) return;
   $('hero-canvas').setAttribute('aria-label', '建筑' + id + '重建点云：拖动或双指滑动旋转，双指捏合或滚轮缩放');
+  note.replaceChildren('Loading point cloud · ', count, '%');
   note.classList.remove('done');
   try { await hero.load(points, progress); } catch { if (document.body.dataset.building === id) document.body.dataset.cloud = 'off'; }
   if (document.body.dataset.building === id) note.classList.add('done');
@@ -85,6 +98,58 @@ try {
   note.textContent = '当前浏览器无法显示点云，已显示渲染图。';
   document.body.dataset.cloud = 'off';
   $('specimen-photo').src = 'assets/cases/4906981/00007-render.png';
+}
+
+// A visitor's .splat / 3DGS .ply is converted in a worker (same steps as scripts/build_hero_points.py)
+// and shown on the stage; the converted cloud can be downloaded in the site's point-cloud format.
+const upload = $('upload-model'), fileInput = $('model-file');
+let worker = null, local = null, converting = false;
+upload.disabled = !hero;
+upload.onclick = () => { if (!converting) fileInput.click(); };
+fileInput.onchange = () => { const file = fileInput.files[0]; fileInput.value = ''; if (file) convertLocal(file, false); };
+$('local-flip').onclick = () => { if (local && !converting) convertLocal(null, !local.flip); };
+$('local-download').onclick = () => {
+  if (!local) return;
+  const a = Object.assign(document.createElement('a'), {href: URL.createObjectURL(new Blob([encode(local.cloud)])), download: local.base + '-points.bin'});
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 30000);
+};
+function status(text, done) {
+  note.textContent = text;
+  note.classList.toggle('done', !!done);
+}
+function convertLocal(file, flip) {
+  if (file && !/\.(splat|ply)$/i.test(file.name)) { status('请选择 .splat 或 3DGS 训练输出的 .ply 文件'); setTimeout(() => note.classList.add('done'), 4000); return; }
+  if (file && file.size > 1536 * 1024 * 1024) { status('模型文件超过1.5 GB，请先导出较小的展示版本'); setTimeout(() => note.classList.add('done'), 4000); return; }
+  worker ??= new Worker(new URL('./cloud-worker.js?v=20261103-upload', import.meta.url), {type: 'module'});
+  converting = true;
+  upload.disabled = $('local-flip').disabled = true;
+  status(file ? '正在读取模型 · 0%' : '正在重新生成点云…');
+  const meta = file ? {base: file.name.replace(/\.[^.]+$/, ''), ext: file.name.split('.').pop().toLowerCase(), bytes: file.size} : local;
+  worker.onmessage = ({data}) => {
+    if (data.progress !== undefined) { status(data.progress < 1 ? `正在读取模型 · ${Math.round(data.progress * 100)}%` : '正在生成点云…'); return; }
+    converting = false;
+    upload.disabled = $('local-flip').disabled = false;
+    if (data.error) { status('无法生成点云：' + data.error); setTimeout(() => note.classList.add('done'), 5000); return; }
+    local = {...meta, flip, cloud: data.cloud};
+    showLocal();
+    status('', true);
+  };
+  worker.postMessage({file, options: {flip}});
+}
+function showLocal() {
+  const {cloud, base, ext, bytes} = local, {total, kept} = cloud.stats;
+  document.body.dataset.building = 'local';
+  document.body.dataset.cloud = 'on';
+  hero.display(cloud, `local:${base}:${bytes}:${local.flip}`);
+  $('hero-canvas').setAttribute('aria-label', base + '点云：拖动或双指滑动旋转，双指捏合或滚轮缩放');
+  renderPanel({
+    family: 'Local model · Browser conversion', name: base,
+    tags: ['本地模型', '.' + ext, cloud.count.toLocaleString() + ' 点'],
+    lede: `在本机浏览器中由模型生成的点云：筛除低透明度与离群高斯点，按不透明度抽样${cloud.count.toLocaleString()}点，并按地面方向自动摆正。拖动旋转查看；方向不对时点“上下翻转”。下载的点云文件可直接用于首页展示。`,
+    metrics: [['points', '原始高斯点', total.toLocaleString()], ['layers', '有效高斯点', kept.toLocaleString()], ['target', '点云点数', cloud.count.toLocaleString()],
+      ['eye', '文件大小', (bytes / 1024 / 1024).toFixed(1) + ' MB'], ['trend', '竖直方向', local.flip ? '已翻转' : '自动识别']],
+  }, true, true);
 }
 $('z-in').onclick = () => hero?.zoom(0.85);
 $('z-out').onclick = () => hero?.zoom(1.18);

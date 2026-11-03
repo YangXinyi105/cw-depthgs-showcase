@@ -74,6 +74,9 @@ def upright_basis(positions, up_flag, yaw_degrees):
     if np.linalg.norm(seed) < 1e-6:
         seed = np.cross(up, [1, 0, 0] if abs(up[0]) < .9 else [0, 1, 0])
     right = seed / np.linalg.norm(seed)
+    # Eigenvector signs are arbitrary; pin one so a model always faces the same way.
+    if right[np.argmax(np.abs(right))] < 0:
+        right = -right
     angle = np.radians(yaw_degrees)
     forward = np.cross(right, up)
     right = np.cos(angle) * right + np.sin(angle) * forward

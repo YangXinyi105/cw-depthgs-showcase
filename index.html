@@ -5,7 +5,7 @@
 <meta name="description" content="面向既有建筑数字化建档的稀疏视角三维高斯重建与可视化复核平台：24张图像训练可实时浏览的建筑场景，重建成果接入采集、复核、验收与只读交付闭环。">
 <meta name="theme-color" content="#f8f5ea">
 <link rel="preload" href="assets/fonts/eb-garamond.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="fonts.css?v=20261027-atlas"><link rel="stylesheet" href="application.css?v=20261103-clouds">
+<link rel="stylesheet" href="fonts.css?v=20261027-atlas"><link rel="stylesheet" href="application.css?v=20261103-upload">
 <link rel="icon" type="image/svg+xml" href="assets/logo-mark.svg"></head>
 <body class="home">
 <a class="skip" href="#main">跳到主要内容</a>
@@ -21,6 +21,8 @@
    <button class="thumb" type="button" data-building="4906981" aria-pressed="true"><img src="assets/cases/4906981/00007-render.png" alt="" width="480" height="347"><b>4906981</b><i>独立验证</i></button>
    <button class="thumb" type="button" data-building="4959323" aria-pressed="false"><img src="assets/cases/4959323/00008-render.png" alt="" width="480" height="347"><b>4959323</b><i>方法选型</i></button>
    <button class="thumb" type="button" data-building="pilot" aria-pressed="false"><img src="assets/cases/pilot/00006-render.png" alt="" width="480" height="348"><b>pilot</b><i>独立验证</i></button>
+   <button class="thumb upload" type="button" id="upload-model" aria-pressed="false" disabled><span class="upload-glyph"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15.5V4.5M7.5 9 12 4.5 16.5 9"/><path d="M4.5 15v4.5h15V15"/></svg></span><b>上传模型</b><i>.splat · .ply</i></button>
+   <input type="file" id="model-file" accept=".splat,.ply" hidden>
   </div>
   <div class="specimen">
    <canvas id="hero-canvas" aria-label="建筑4906981重建点云：拖动或双指滑动旋转，双指捏合或滚轮缩放"></canvas>
@@ -45,12 +47,15 @@
   <hr class="rule">
   <h2>关键指标</h2>
   <dl class="traits" id="b-traits"></dl>
+  <div class="group" id="b-local" hidden><div class="local-actions"><button type="button" id="local-flip">上下翻转</button><button type="button" id="local-download">下载点云文件</button></div></div>
+  <div class="group" id="b-exp">
   <hr class="rule">
   <h2>实验条件</h2>
   <dl class="traits"><div><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="14" rx="1.5"/><path d="M3.5 15.5l5-4.5 4 3.5 3-2.5 5 4"/><circle cx="16" cy="9.2" r="1.6"/></svg><dt>训练视角</dt><dd>24 张</dd></div><div><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg><dt>训练迭代</dt><dd>7000 次</dd></div><div><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="1"/><path d="M4 12h16M12 4v16"/></svg><dt>随机种子</dt><dd>0 · 1 · 2</dd></div><div><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l7.5 3v5.5c0 4.2-3.2 7.7-7.5 8.5-4.3-.8-7.5-4.3-7.5-8.5V6.5z"/><path d="M8.8 12l2.3 2.3 4.2-4.3"/></svg><dt>配对 Bootstrap</dt><dd>10,000 次</dd></div></dl>
+  </div>
   <a class="closeup reveal d5" href="review.html" id="b-closeup"><img src="assets/cases/4906981/00012-render.png" alt="" width="480" height="347"><div><h3>细节对照</h3><p>参考照片与CW-DepthGS渲染逐视角对照，并在照片上标注问题。</p></div><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></a>
  </aside>
 </div>
 <script src="atlas.js?v=20261027-atlas"></script>
-<script type="module" src="home.js?v=20261103-clouds"></script>
+<script type="module" src="home.js?v=20261103-upload"></script>
 </body></html>

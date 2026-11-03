@@ -103,6 +103,16 @@ p{margin:0 0 12px}
 .thumb img{width:84px;height:46px;object-fit:cover;border-radius:4px;margin-bottom:4px}
 .thumb b{color:var(--ink);font:500 15.5px/1.15 var(--serif)}
 .thumb i{color:var(--muted);font:italic 400 12.5px/1.2 var(--serif)}
+.thumb:disabled{opacity:.5;cursor:default;transform:none}
+.thumb.upload{border-style:dashed}
+.upload-glyph{display:grid;place-items:center;width:84px;height:46px;margin-bottom:4px;border-radius:4px;background:var(--sage);color:var(--olive)}
+.upload-glyph .ico{width:20px;height:20px}
+.panel .group{display:contents}
+.panel .group[hidden]{display:none}
+.local-actions{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 4px}
+.local-actions button{height:34px;padding:0 15px;border:1px solid var(--olive-line);border-radius:999px;background:var(--surface);color:var(--ink);font-size:13px;cursor:pointer;transition:background .3s}
+.local-actions button:hover{background:var(--sage)}
+@media(max-width:600px){.thumbs{max-width:100%;overflow-x:auto;scrollbar-width:none;padding-bottom:4px}.thumb{flex:0 0 auto}}
 .rail{position:absolute;z-index:3;left:26px;top:50%;display:flex;flex-direction:column;gap:12px;transform:translateY(-30%)}
 .rail button{display:grid;place-items:center;width:40px;height:40px;border:1px solid rgba(29,29,23,.28);border-radius:50%;background:var(--surface);color:var(--ink);cursor:pointer;transition:background .3s,color .3s,border-color .3s,transform .3s}
 .rail button:hover{transform:scale(1.06)}

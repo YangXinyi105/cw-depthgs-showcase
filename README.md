@@ -8,6 +8,7 @@
 
 - 总览：建筑4906981的重建点云在主舞台自下而上聚合并缓慢旋转，可拖动、缩放；切换三栋建筑查看各自指标。点云从网页展示模型按不透明度抽样16万点，由 `scripts/build_hero_points.py` 生成 `assets/hero-points.bin`。
   其他建筑：`python scripts/build_hero_points.py 模型.splat assets/hero-points-<编号>.bin --preview 预览.png`（也接受训练输出的3DGS `.ply`），核对预览图中建筑朝上后，在 `home.js` 对应建筑加上 `points: 'assets/hero-points-<编号>.bin'`。方向不对时用 `--up -z`、`--yaw 90` 等参数调整；未配置点云的建筑显示渲染图。
+  访客也可点击“上传模型”选择本机的 `.splat` 或3DGS `.ply`：`cloud-worker.js` 在浏览器中按同样步骤（`cloud-convert.js`）生成点云并显示，可上下翻转、下载为同格式的点云文件。
 - 三维浏览：加载完整点数版、低内存预览或本地 .splat 模型。
 - 人工复核：在九个已归档测试视角的卡片中选择，悬停预览渲染，进入后并排标注或滑块对比，记录保存在当前浏览器。
 - 项目档案：连接本机或云端档案服务，按“采集管理、重建成果、复核交付、修改记录”标签分区操作。

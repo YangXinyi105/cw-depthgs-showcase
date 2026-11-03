@@ -245,6 +245,8 @@ export async function initHero(canvas, {url = 'assets/hero-points.bin', onReady,
       show(next, src);
       return true;
     },
+    // Show a cloud built in the page (e.g. from an uploaded model); cancels pending loads.
+    display(cloud, key) { loadSeq++; show(cloud, key); },
     dispose() { cancelAnimationFrame(frame); points?.geometry.dispose(); material.dispose(); dustGeometry.dispose(); dustMaterial.dispose(); renderer.dispose(); },
   };
 }
