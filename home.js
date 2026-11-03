@@ -23,13 +23,13 @@ const BUILDINGS = {
     family: 'TUM2TWIN · Method selection', tags: ['调参建筑', '24 视角', '+0.16 dB'],
     lede: '用于方法选型的调参建筑。CW-DepthGS较RGB-only提高0.1552 dB（95%区间[0.0544, 0.2543]），平均PSNR为21.19 dB，固定深度为21.26 dB。',
     metrics: [['target', 'PSNR', '21.1899 dB'], ['trend', 'ΔPSNR · 对RGB-only', '+0.1552 dB'], ['trend', 'ΔPSNR · 对固定深度', '−0.0717 dB'], ['layers', 'SSIM', '0.6643'], ['eye', 'LPIPS', '0.3366'], ['points', '局部校正P95', '6.53%']],
-    photo: 'assets/cases/4959323/00008-render.png', closeup: 'assets/cases/4959323/00010-render.png',
+    photo: 'assets/cases/4959323/00008-render.png', points: 'assets/hero-points-4959323.bin', closeup: 'assets/cases/4959323/00010-render.png',
   },
   pilot: {
     family: 'TUM2TWIN · Independent validation', tags: ['验证建筑', '24 视角', '+0.21 dB'],
     lede: '第二栋独立验证建筑。CW-DepthGS较RGB-only提高0.2066 dB（95%区间[0.0206, 0.3853]）。其局部校正幅度P95为8.92%，超过8%阈值，诊断建议回退至鲁棒几何与跨视角路径。',
     metrics: [['target', 'PSNR', '19.6361 dB'], ['trend', 'ΔPSNR · 对RGB-only', '+0.2066 dB'], ['trend', 'ΔPSNR · 对固定深度', '+0.0993 dB'], ['layers', 'SSIM', '0.7395'], ['eye', 'LPIPS', '0.2395'], ['points', '局部校正P95', '8.92%']],
-    photo: 'assets/cases/pilot/00006-render.png', closeup: 'assets/cases/pilot/00012-render.png',
+    photo: 'assets/cases/pilot/00006-render.png', points: 'assets/hero-points-pilot.bin', closeup: 'assets/cases/pilot/00012-render.png',
   },
 };
 
