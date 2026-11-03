@@ -185,10 +185,10 @@
       const collectionDigest=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(views.map(v=>v.id).sort().join('|')));
       const collectionId='local-'+Array.from(new Uint8Array(collectionDigest),n=>n.toString(16).padStart(2,'0')).join('');
       localAssets.forEach(url=>URL.revokeObjectURL(url));localAssets.clear();pending.forEach(url=>localAssets.add(url));
-      const b={id:collectionId,name:'本地现场照片',local:true,source:'用户在本机选择的照片，仅作人工查看与记录。关闭页面后需重新选择同一组原始照片，标注可通过JSON档案恢复。',views};
+      const b={id:collectionId,name:'本地现场照片',local:true,source:'在本机选择的现场照片，用于人工查看与标注。再次打开页面时选择同一组照片并导入JSON档案，即可恢复标注。',views};
       manifest.buildings=manifest.buildings.filter(x=>!x.local);manifest.buildings.push(b);
       ui.building.replaceChildren();manifest.buildings.forEach(x=>ui.building.append(el('option',x.name,{value:x.id})));selectBuilding(b.id);
-      notify('已载入'+files.length+'张现场照片，仅在本机查看。请导出JSON备份标注，重新打开页面后需重选相同的原始照片。');
+      notify('已载入'+files.length+'张现场照片，可在本机查看与标注。导出JSON即可备份标注，再次打开时重选同一组照片即可恢复。');
     }catch(err){pending.forEach(url=>URL.revokeObjectURL(url));notify('现场照片读取失败：'+err.message+'。',true);}
   }
   function wrap(ctx,text,maxWidth){const out=[];let line='';for(const ch of text){if(ch==='\n'){out.push(line);line='';continue;}if(ctx.measureText(line+ch).width>maxWidth&&line){out.push(line);line=ch;}else line+=ch;}out.push(line);return out;}
@@ -214,7 +214,7 @@
     const doc=win.document;doc.title=recordName()+' 人工复核记录';doc.documentElement.lang='zh-CN';
     const style=doc.createElement('style');style.textContent='body{font:15px/1.6 "Times New Roman",SimSun,serif;color:#172025;margin:30px}h1{font-size:25px}h2{font-size:20px}section{break-inside:avoid;margin:28px 0}.pics{display:flex;gap:16px}.pics figure{width:48%;margin:0}.stage{position:relative}.stage img{display:block;width:100%}.mark{position:absolute;transform:translate(-50%,-50%);background:#b84a24;color:#fff;border:1px solid white;border-radius:50%;width:22px;height:22px;text-align:center;line-height:22px;font-size:12px}li{white-space:pre-wrap;overflow-wrap:anywhere}button{padding:8px 18px}@media print{button{display:none}body{margin:0}@page{margin:16mm}}';doc.head.append(style);
     const make=(tag,text)=>{const n=doc.createElement(tag);if(text!==undefined)n.textContent=text;return n;};
-    doc.body.append(make('h1',recordName()+' 人工复核记录'),make('p',building.local?'本机现场照片的人工记录，未执行重建或自动诊断。':'多视角渲染浏览。标注为人工记录，不代表自动诊断或工程测量结论。'),make('p','图像来源：'+(building.source||'未提供')),make('p','采集日期：'+(recordMeta(building.id).date||'未填写')),make('p','导出时间：'+new Date().toLocaleString('zh-CN')));
+    doc.body.append(make('h1',recordName()+' 人工复核记录'),make('p',building.local?'本机现场照片的人工复核记录。':'多视角渲染对照与人工复核标注。'),make('p','图像来源：'+(building.source||'未提供')),make('p','采集日期：'+(recordMeta(building.id).date||'未填写')),make('p','导出时间：'+new Date().toLocaleString('zh-CN')));
     const print=make('button','正在准备图片…');print.disabled=true;print.onclick=()=>win.print();const reportState=make('p','正在加载报告图片，请稍候。');reportState.setAttribute('role','status');doc.body.append(print,reportState);
     const imgs=[];
     building.views.forEach(v=>{const section=make('section');section.append(make('h2',v.label));const pics=make('div');pics.className='pics';const ns=loadNotes(building.id,v.id);
@@ -241,7 +241,7 @@
     const actions=el('div',null,{class:'ws-actions'});ui.import=el('input',null,{type:'file',accept:'.json,application/json',hidden:''});ui.import.onchange=importJSON;actions.append(button('在中心添加标注',()=>addNote(.5,.5)),button('下载JSON档案',exportJSON),button('导入JSON档案',()=>ui.import.click()),button('下载标注PNG',exportPNG),button('生成打印报告',printReport),ui.import);root.append(actions);
     ui.message=el('p','',{role:'status','aria-live':'polite',class:'ws-message'});root.append(ui.message);
     const area=el('div',null,{class:'ws-review-area'}),listwrap=el('div');ui.count=el('h3');ui.list=el('ol',null,{class:'ws-note-list'});listwrap.append(ui.count,ui.list);
-    ui.editor=el('form',null,{class:'ws-editor',hidden:''});ui.editorTitle=el('h3','编辑标注');ui.note=el('textarea',null,{rows:'5',maxlength:String(TEXT_LIMIT),placeholder:'描述需要复核的外观区域或人工观察，不自动判定病害。'});ui.status=el('select');['待复核','已复核'].forEach(s=>ui.status.append(el('option',s,{value:s})));
+    ui.editor=el('form',null,{class:'ws-editor',hidden:''});ui.editorTitle=el('h3','编辑标注');ui.note=el('textarea',null,{rows:'5',maxlength:String(TEXT_LIMIT),placeholder:'描述需要复核的外观区域或观察结果。'});ui.status=el('select');['待复核','已复核'].forEach(s=>ui.status.append(el('option',s,{value:s})));
     ui.x=el('input',null,{type:'number',min:'0',max:'100',step:'.01',required:''});ui.y=el('input',null,{type:'number',min:'0',max:'100',step:'.01',required:''});const coordinates=el('div',null,{class:'ws-coordinates'});coordinates.append(field('水平位置 %',ui.x),field('垂直位置 %',ui.y));
     ui.editor.append(ui.editorTitle,field('人工备注',ui.note),field('复核状态',ui.status),coordinates,el('button','保存标注',{type:'submit'}));ui.editor.onsubmit=saveEditor;area.append(listwrap,ui.editor);root.append(area);selectBuilding(manifest.buildings[0].id);
   }

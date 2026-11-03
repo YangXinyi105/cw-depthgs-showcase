@@ -19,7 +19,7 @@ const BUILDINGS = {
   },
   '4959323': {
     family: 'TUM2TWIN · Method selection', tags: ['调参建筑', '24 视角', '+0.16 dB'],
-    lede: '用于方法选型的调参建筑。CW-DepthGS较RGB-only提高0.1552 dB（95%区间[0.0544, 0.2543]），但平均PSNR仍略低于固定深度（21.19 对 21.26 dB），说明增强模块的收益随场景变化。',
+    lede: '用于方法选型的调参建筑。CW-DepthGS较RGB-only提高0.1552 dB（95%区间[0.0544, 0.2543]），平均PSNR为21.19 dB，固定深度为21.26 dB。',
     metrics: [['target', 'PSNR', '21.1899 dB'], ['trend', 'ΔPSNR · 对RGB-only', '+0.1552 dB'], ['trend', 'ΔPSNR · 对固定深度', '−0.0717 dB'], ['layers', 'SSIM', '0.6643'], ['eye', 'LPIPS', '0.3366'], ['points', '局部校正P95', '6.53%']],
     photo: 'assets/cases/4959323/00008-render.png', closeup: 'assets/cases/4959323/00010-render.png',
   },

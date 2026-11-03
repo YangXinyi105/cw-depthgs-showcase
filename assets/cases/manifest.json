@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "mode": "retained-test-view-images",
-  "description": "公开TUM2TWIN建筑测试视角的参考照片与已完成训练的渲染结果。按已有对比板提取，不代表连续三维浏览。",
+  "description": "公开TUM2TWIN建筑测试视角的参考照片与已完成训练的渲染结果。图像提取自已归档的测试视角对比板；连续三维浏览见“三维浏览”页面。",
   "selectionMethod": "每栋使用已归档的固定深度与CW-DepthGS差值最好、中位和最差测试视角；界面按视角编号显示。",
   "buildings": [
     {
