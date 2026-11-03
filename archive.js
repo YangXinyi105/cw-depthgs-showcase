@@ -1,6 +1,6 @@
 const $ = id => document.getElementById(id);
 const state = {base:'',admin:'',token:'',id:'',detail:null,draft:[],dirty:false,asset:null,blob:null,viewer:null,pendingMount:null,assetAbort:null,loadId:0,projectSeq:0,projectAbort:null,projectLoading:false,mutation:false,navigation:false,sharedMode:'',share:'',edit:'',selected:null,compareAbort:null,compareURL:'',compareId:''};
-const ACTIONS = {created:'建立档案',metadata_updated:'更新资料',asset_uploaded:'上传文件',annotations_saved:'保存标注',share_rotated:'更新分享权限',capture_saved:'保存采集任务',task_exported:'导出重建任务包',version_registered:'登记重建版本',acceptance_saved:'保存验收结论',analysis_generated:'生成项目分析'};
+const ACTIONS = {created:'建立档案',metadata_updated:'更新资料',asset_uploaded:'上传文件',annotations_saved:'保存标注',share_rotated:'更新分享权限',capture_saved:'保存采集任务',task_exported:'导出重建任务包',version_registered:'登记重建版本',acceptance_saved:'保存验收结论',analysis_generated:'生成项目分析',workflow_updated:'更新项目流程'};
 let cleanupQueue=Promise.resolve(),acceptedHash=location.hash;
 const e = (tag,text,cls) => {const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;return n;};
 function message(text,error=false){$('cloud-message').textContent=text;$('cloud-message').classList.toggle('error',error);}
@@ -18,7 +18,9 @@ async function request(path,{timeoutMs=25000,...options}={},a=state){
  }catch(error){if(controller.signal.reason?.name==='TimeoutError')throw Error(controller.signal.reason.message);throw error;}
  finally{clearTimeout(timeout);source?.removeEventListener('abort',cancel);}
 }
-async function run(action){try{await action();}catch(error){if(error.name!=='AbortError')message(error instanceof TypeError?'无法连接项目服务，请检查地址、网络或服务是否允许此网站访问。':error.message,true);}}
+// fetch() rejects with a TypeError only for network/CORS failures; other TypeErrors are page bugs and must not look like an outage.
+const networkFailure=error=>error instanceof TypeError&&/fetch|network|load failed/i.test(error.message);
+async function run(action){try{await action();}catch(error){if(error.name==='AbortError')return;message(networkFailure(error)?'无法连接项目服务，请检查地址、网络或服务是否允许此网站访问。':error instanceof TypeError?'页面处理项目数据时出错（'+error.message+'），请刷新后重试；如仍出现，请更新服务端。':error.message,true);console.error(error);}}
 function syncBusy(){$('main').inert=state.mutation||state.navigation;$('main').setAttribute('aria-busy',String(state.mutation||state.navigation));$('project-panel').inert=state.projectLoading;}
 async function mutate(action){if(state.mutation||state.navigation||state.projectLoading)throw Error('请等待当前操作完成。');state.mutation=true;syncBusy();try{return await action();}finally{state.mutation=false;syncBusy();}}
 function access(){return {base:state.base,admin:state.admin,token:state.token};}
