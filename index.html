@@ -5,7 +5,7 @@
 <meta name="description" content="面向既有建筑数字化建档的稀疏视角三维高斯重建与可视化复核平台：24张图像训练可实时浏览的建筑场景，重建成果接入采集、复核、验收与只读交付闭环。">
 <meta name="theme-color" content="#f8f5ea">
 <link rel="preload" href="assets/fonts/eb-garamond.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="fonts.css?v=20261027-atlas"><link rel="stylesheet" href="application.css?v=20261103-upload">
+<link rel="stylesheet" href="fonts.css?v=20261027-atlas"><link rel="stylesheet" href="application.css?v=20261103-viewmode">
 <link rel="icon" type="image/svg+xml" href="assets/logo-mark.svg"></head>
 <body class="home">
 <a class="skip" href="#main">跳到主要内容</a>
@@ -35,6 +35,7 @@
    <button type="button" id="z-out" aria-label="缩小"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.3-4.3M8 11h6"/></svg></button>
    <button type="button" id="fs" aria-label="全屏"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
    <button type="button" id="auto" class="on" aria-pressed="true" aria-label="自动旋转"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.6"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg></button>
+   <button type="button" id="view-mode" aria-pressed="false" aria-label="切换为图片" title="切换为图片"></button>
   </div>
   <div class="spin reveal d3"><button type="button" id="rot-l" aria-label="向左旋转45度"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4v6h6"/><path d="M4.6 15a8 8 0 1 0 1.8-8.3L4 10"/></svg></button><span id="angle">360°</span><button type="button" id="rot-r" aria-label="向右旋转45度"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4v6h-6"/><path d="M19.4 15a8 8 0 1 1-1.8-8.3L20 10"/></svg></button></div>
   <p class="caption reveal d4">Twenty-four views, and the building keeps its form.</p>
@@ -57,5 +58,5 @@
  </aside>
 </div>
 <script src="atlas.js?v=20261027-atlas"></script>
-<script type="module" src="home.js?v=20261103-buildings"></script>
+<script type="module" src="home.js?v=20261103-viewmode"></script>
 </body></html>

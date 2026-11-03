@@ -10,6 +10,11 @@ const ICON = {
   eye: '<path d="M2.5 12s3.5-6.5 9.5-6.5 9.5 6.5 9.5 6.5-3.5 6.5-9.5 6.5S2.5 12 2.5 12z"/><circle cx="12" cy="12" r="2.8"/>',
   points: '<circle cx="6" cy="8" r="1.6"/><circle cx="15" cy="6" r="2"/><circle cx="11" cy="15" r="2.4"/><circle cx="18.5" cy="15.5" r="1.4"/>',
 };
+// Icon shows what a click switches to: the image, or back to the 3D point cloud.
+const VIEW_ICON = {
+  photo: '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="14" rx="1.5"/><path d="M3.5 15.5l5-4.5 4 3.5 3-2.5 5 4"/><circle cx="16" cy="9.2" r="1.6"/></svg>',
+  cloud: '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/></svg>',
+};
 // Three-seed means and paired bootstrap results from the technical report (table 1 and section 5.3).
 // `points` is a file from scripts/build_hero_points.py; buildings without one show `photo` instead.
 const BUILDINGS = {
@@ -34,6 +39,7 @@ const BUILDINGS = {
 };
 
 let hero = null, heroFailed = false; // hero stays null while the first cloud loads
+let preferPhoto = false; // set by the cloud/image toggle; applies to every building
 function renderPanel({family, name, tags, lede, metrics}, animate, local) {
   $('b-family').textContent = family;
   $('b-name').textContent = name;
@@ -75,16 +81,32 @@ fill('4906981', false);
 const note = $('load-note'), count = $('loader-count'), progress = f => { count.textContent = String(Math.round(f * 100)); };
 // The stage shows the selected building's point cloud, or its render when there is none.
 async function showCloud(id) {
-  const {points, photo} = BUILDINGS[id];
-  document.body.dataset.cloud = points && !heroFailed ? 'on' : 'off';
+  const {points, photo} = BUILDINGS[id], hasCloud = !!points && !heroFailed;
+  document.body.dataset.cloud = hasCloud && !preferPhoto ? 'on' : 'off';
+  syncViewToggle(hasCloud);
   if (!photo) $('specimen-photo').src = 'assets/cases/' + id + '/00007-render.png';
-  if (!points || !hero) return;
+  if (preferPhoto) note.classList.add('done');
+  if (!hasCloud || preferPhoto || !hero) return;
   $('hero-canvas').setAttribute('aria-label', '建筑' + id + '重建点云：拖动或双指滑动旋转，双指捏合或滚轮缩放');
   note.replaceChildren('Loading point cloud · ', count, '%');
   note.classList.remove('done');
   try { await hero.load(points, progress); } catch { if (document.body.dataset.building === id) document.body.dataset.cloud = 'off'; }
   if (document.body.dataset.building === id) note.classList.add('done');
 }
+// Both views exist only for the site's buildings; an uploaded model has no image to switch to.
+function syncViewToggle(available) {
+  const button = $('view-mode'), photo = available && preferPhoto, label = photo ? '切换为三维点云' : '切换为图片';
+  button.disabled = !available;
+  button.setAttribute('aria-pressed', String(photo));
+  button.setAttribute('aria-label', label);
+  button.title = label;
+  button.innerHTML = photo ? VIEW_ICON.cloud : VIEW_ICON.photo;
+}
+$('view-mode').onclick = () => {
+  if (document.body.dataset.building === 'local') return;
+  preferPhoto = !preferPhoto;
+  showCloud(document.body.dataset.building);
+};
 try {
   hero = await initHero($('hero-canvas'), {
     url: BUILDINGS['4906981'].points,
@@ -95,6 +117,7 @@ try {
   showCloud(document.body.dataset.building);
 } catch (error) {
   heroFailed = true;
+  syncViewToggle(false);
   note.textContent = '当前浏览器无法显示点云，已显示渲染图。';
   document.body.dataset.cloud = 'off';
   $('specimen-photo').src = 'assets/cases/4906981/00007-render.png';
@@ -141,6 +164,7 @@ function showLocal() {
   const {cloud, base, ext, bytes} = local, {total, kept} = cloud.stats;
   document.body.dataset.building = 'local';
   document.body.dataset.cloud = 'on';
+  syncViewToggle(false);
   hero.display(cloud, `local:${base}:${bytes}:${local.flip}`);
   $('hero-canvas').setAttribute('aria-label', base + '点云：拖动或双指滑动旋转，双指捏合或滚轮缩放');
   renderPanel({

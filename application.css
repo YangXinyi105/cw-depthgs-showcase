@@ -119,6 +119,8 @@ p{margin:0 0 12px}
 .rail button[aria-pressed=true],.rail button.on{background:var(--olive);border-color:var(--olive);color:var(--surface)}
 .rail button:disabled{opacity:.35;cursor:default;transform:none}
 .rail .ico{width:18px;height:18px}
+/* Image view: the 3D-only controls step back. */
+.home[data-cloud="off"] :is(#z-in,#z-out,#auto),.home[data-cloud="off"] .spin>*{opacity:.35;pointer-events:none}
 .spin{position:absolute;z-index:3;left:50%;bottom:58px;display:flex;align-items:center;gap:14px;height:38px;padding:0 14px;border:1px solid var(--line);border-radius:999px;background:var(--surface);transform:translateX(-50%);color:var(--ink);font-size:13.5px}
 .spin button{display:grid;place-items:center;width:24px;height:24px;border:0;background:transparent;color:var(--ink);cursor:pointer}
 .spin .ico{width:16px;height:16px}
