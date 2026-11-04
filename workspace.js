@@ -51,6 +51,7 @@
   }
   function persist(b, v, data) {
     memory.set(key(b, v), data);
+    root.dispatchEvent(new CustomEvent('ws:notes', {detail: {building: b, view: v}}));
     try { localStorage.setItem(key(b, v), JSON.stringify(data)); }
     catch (e) { storageFailed = true; warnStorage('浏览器未能保存标注。离开页面前请下载JSON档案，本次修改暂存于当前页面。'); }
   }
@@ -250,6 +251,25 @@
     try{const response=await fetch('assets/cases/manifest.json',{cache:'no-cache'});if(!response.ok)throw Error('案例清单暂不可用（'+response.status+'）');manifest=validateManifest(await response.json());root.dataset.wsReady='ready';buildUI();}
     catch(err){root.dataset.wsReady='';root.replaceChildren(el('p','无法加载工作台：'+err.message+'。',{role:'alert'}),button('重新加载',initWorkspace));}
   }
+  // 人工复核 opens the photos of the project opened in 项目档案 as a collection of its own. Notes start
+  // from the project's annotations; the page saves them back with notesOf().
+  function openCollection(c) {
+    if (!manifest || !ui) throw Error('工作台尚未就绪');
+    const b = {id: c.id, name: c.name, local: true, project: true, source: c.source,
+      views: c.views.map(v => ({id: v.id, label: v.label, reference: v.url, render: v.url}))};
+    c.views.forEach(v => {
+      localAssets.add(v.url);
+      memory.set(key(b.id, v.id), (c.notes[v.id] || []).map(n => ({id: n.id, x: n.x, y: n.y, note: n.note, status: ['待复核', '已复核'].includes(n.status) ? n.status : '待复核'})));
+    });
+    manifest.buildings = manifest.buildings.filter(x => x.id !== b.id); manifest.buildings.push(b);
+    ui.building.replaceChildren(); manifest.buildings.forEach(x => ui.building.append(el('option', x.name, {value: x.id})));
+    selectBuilding(b.id);
+  }
+  function notesOf(id) {
+    const b = manifest?.buildings.find(x => x.id === id);
+    return b ? Object.fromEntries(b.views.map(v => [v.id, loadNotes(b.id, v.id)])) : {};
+  }
+  window.cwWorkspace = {openCollection, notesOf};
   window.initWorkspace=initWorkspace;
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initWorkspace);else initWorkspace();
 })();

@@ -104,7 +104,8 @@ function buildCloud({count, position, rgba, size, lo, hi}, material) {
   return points;
 }
 
-export async function initHero(canvas, {url = 'assets/hero-points.bin', onReady, onProgress, onAngle} = {}) {
+// `cloud` (already decoded, e.g. from cloud-convert.js) is shown instead of downloading `url`.
+export async function initHero(canvas, {url = 'assets/hero-points.bin', cloud, onReady, onProgress, onAngle} = {}) {
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const renderer = new THREE.WebGLRenderer({canvas, antialias: false, alpha: true, premultipliedAlpha: false, powerPreference: 'high-performance'});
   renderer.setPixelRatio(Math.min(devicePixelRatio, 1.75));
@@ -129,8 +130,8 @@ export async function initHero(canvas, {url = 'assets/hero-points.bin', onReady,
     else progress?.(1);
     return cache.get(src);
   }
-  const data = await fetchCloud(url, onProgress);
-  show(data, url);
+  const data = cloud || await fetchCloud(url, onProgress);
+  show(data, cloud ? 'inline' : url);
   const dustCount = 900, dustPos = new Float32Array(dustCount * 3), dustSeed = new Float32Array(dustCount);
   for (let i = 0; i < dustCount; i++) {
     dustPos[i * 3] = (Math.random() - 0.5) * 30; dustPos[i * 3 + 1] = (Math.random() - 0.35) * 14; dustPos[i * 3 + 2] = (Math.random() - 0.5) * 30; dustSeed[i] = Math.random();

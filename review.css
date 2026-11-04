@@ -41,3 +41,10 @@
 .tool-panel .ws-review-area{grid-template-columns:1fr;gap:14px}
 ::view-transition-group(review-hero){animation-duration:.75s;animation-timing-function:cubic-bezier(.2,.75,.2,1)}
 @media(max-width:960px){.flow{position:relative;inset:auto;height:420px;margin-top:16px}.flow-card{width:min(480px,80%)}.review-page .spin,.review-page .caption{position:static;transform:none;margin:10px auto 0;width:max-content}}
+.picker-empty{position:absolute;inset:130px 0 auto;display:grid;justify-items:center;gap:18px;padding:40px 24px;text-align:center;color:var(--muted);font:italic 400 19px/1.5 var(--serif)}
+.picker-empty p{max-width:520px;margin:0}
+.project-thumb .thumb-ico{display:grid;place-items:center;width:84px;height:46px;margin-bottom:4px;border-radius:4px;background:var(--sage);color:var(--olive)}
+.project-thumb .thumb-ico .ico{width:20px;height:20px}
+.project-thumb i{max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.save-state{color:var(--muted);font-size:13px}
+@media(max-width:960px){.picker-empty{position:relative;inset:auto}}

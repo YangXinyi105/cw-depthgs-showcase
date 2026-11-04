@@ -147,10 +147,21 @@ p{margin:0 0 12px}
 .specimen .ground{position:absolute;left:50%;bottom:118px;width:min(62%,560px);height:44px;transform:translateX(-50%);background:radial-gradient(ellipse at center,rgba(187,184,176,.95),rgba(187,184,176,.35) 45%,transparent 72%);filter:blur(4px);pointer-events:none}
 .specimen .photo{position:absolute;left:50%;top:50%;width:min(64%,620px);transform:translate(-50%,-56%);border-radius:6px;box-shadow:0 40px 60px -40px rgba(20,19,11,.55);opacity:0;transition:opacity .6s;pointer-events:none}
 .home[data-cloud="off"] .specimen .photo{opacity:1}
-.home[data-cloud="off"] .specimen canvas{opacity:0;pointer-events:none}
+.home[data-cloud="off"] .specimen canvas,.home[data-cloud="empty"] .specimen canvas{opacity:0;pointer-events:none}
+.home[data-cloud="empty"] :is(#z-in,#z-out,#auto),.home[data-cloud="empty"] .spin>*{opacity:.35;pointer-events:none}
 .specimen canvas{transition:opacity .6s}
 .load-note{position:absolute;z-index:2;left:50%;top:50%;transform:translate(-50%,-50%);color:var(--muted);font:italic 17px/1 var(--serif);transition:opacity .6s;pointer-events:none}
 .load-note.done{opacity:0}
 
 @media(max-width:1180px){:root{--panel:340px;--side:220px}.brand{font-size:23px}}
 @media(max-width:960px){body{overflow:auto}.app{position:static;display:flex;flex-direction:column}.sidebar{border-right:0;border-bottom:1px solid var(--line);padding:14px}.side-nav{flex-direction:row;flex-wrap:wrap}.side-nav a{grid-template-columns:18px auto}.side-nav a small,.featured{display:none}.topbar{padding:10px 14px}.stage{min-height:70vh}.panel{margin:0 14px 14px}}
+/* Examples (our trained buildings) carry a badge and a close control; closing hides them site-wide. */
+.thumb{position:relative}
+.example-badge{position:absolute;top:5px;left:5px;padding:0 6px;border-radius:999px;background:var(--olive);color:var(--surface);font:500 11px/17px var(--sans,inherit);pointer-events:none}
+.example-close{position:absolute;top:4px;right:4px;display:grid;place-items:center;width:20px;height:20px;border:1px solid var(--line);border-radius:50%;background:var(--surface);color:var(--muted);font-size:13px;line-height:1;cursor:pointer;opacity:0;transition:opacity .2s}
+.is-example:hover .example-close,.is-example:focus-within .example-close,.example-close:focus-visible{opacity:1}
+@media(hover:none){.example-close{opacity:1}}
+[data-hide-examples] .is-example{display:none!important}
+:root:not([data-hide-examples]) .when-no-examples,:root:not([data-hide-examples]) .examples-restore{display:none!important}
+.examples-restore{align-self:center;flex:0 0 auto;height:30px;padding:0 12px;border:1px dashed var(--olive-line);border-radius:999px;background:transparent;color:var(--muted);font-size:12.5px;cursor:pointer}
+.examples-restore:hover{color:var(--ink);border-color:var(--olive)}

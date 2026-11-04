@@ -172,12 +172,15 @@ export async function mountSplatViewer(container, {url, name = '三维模型', o
       orbit(angle){if(disposed)return;const delta=camera.position.clone().sub(viewer.controls.target);delta.applyAxisAngle(camera.up,angle);camera.position.copy(viewer.controls.target).add(delta);update();},
       zoom(factor){if(disposed||!Number.isFinite(factor)||factor<=0)return;const delta=camera.position.clone().sub(viewer.controls.target).multiplyScalar(factor);delta.clampLength(info.radius*.005,info.radius*30);camera.position.copy(viewer.controls.target).add(delta);update();},
       flipUp(){if(disposed)return;camera.up.multiplyScalar(-1);update();},
+      // Render now and read the canvas in the same task, before the frame is presented.
+      snapshot(){if(disposed)return Promise.reject(new Error('模型已关闭'));viewer.update();viewer.render();return new Promise((resolve,reject)=>renderer.domElement.toBlob(b=>b?resolve(b):reject(new Error('截图失败')),'image/png'));},
       dispose:release
     };
   } catch (error) {await release();throw error;}
 }
 
-export function initStandaloneViewer() {
+// Returns hooks for the page (project models, screenshots); onChange(loaded) follows the open model.
+export function initStandaloneViewer({onChange} = {}) {
   const input=document.getElementById('model-file'),host=document.getElementById('model-view'),status=document.getElementById('model-status');
   if(!input||!host||!status)return;
   const demo=document.getElementById('model-demo'),light=document.getElementById('model-light');
@@ -185,14 +188,14 @@ export function initStandaloneViewer() {
   const controls=['model-reset','model-near','model-far','model-flip','model-left','model-right'].map(id=>document.getElementById(id)).filter(Boolean);
   const closeButton=document.getElementById('model-close');let current, fileURL, abort;
   const empty=()=>{const message=document.createElement('div');message.className='model-empty';message.textContent='模型加载后，可在这里旋转和缩放。';host.replaceChildren(message);};
-  const close=async()=>{abort?.abort();if(current)await current.dispose();current=null;if(fileURL)URL.revokeObjectURL(fileURL);fileURL=null;controls.forEach(b=>b.disabled=true);if(closeButton)closeButton.disabled=true;empty();};
+  const close=async()=>{abort?.abort();if(current)await current.dispose();current=null;if(fileURL)URL.revokeObjectURL(fileURL);fileURL=null;controls.forEach(b=>b.disabled=true);if(closeButton)closeButton.disabled=true;empty();onChange?.(false);};
   const load=async(source,name,initialView,format='splat')=>{
     input.disabled=true;if(demo)demo.disabled=true;if(light)light.disabled=true;
     try{await close();host.replaceChildren();abort=new AbortController();
-      const url=source instanceof File?(fileURL=URL.createObjectURL(source)):source;
+      const url=source instanceof Blob?(fileURL=URL.createObjectURL(source)):source;
       if(closeButton)closeButton.disabled=false;
       current=await mountSplatViewer(host,{url,name,initialView,format,signal:abort.signal,onProgress:p=>{status.textContent=p.stage==='ready'?name+' · '+p.count.toLocaleString('zh-CN')+'个高斯点，可开始浏览。':p.stage==='reading'?'正在读取模型'+(p.percent===null?'…':' '+p.percent+'%'):'正在准备三维渲染，请稍候…';}});
-      controls.forEach(b=>b.disabled=false);
+      controls.forEach(b=>b.disabled=false);onChange?.(true);
     }catch(error){await close();status.textContent=error.name==='AbortError'?'已取消模型加载。':'模型打开失败：'+error.message;}
     finally{input.disabled=false;if(demo)demo.disabled=false;if(light)light.disabled=false;}
   };
@@ -207,4 +210,5 @@ export function initStandaloneViewer() {
   const actions={'model-reset':()=>current?.reset(),'model-left':()=>current?.orbit(Math.PI/8),'model-right':()=>current?.orbit(-Math.PI/8),'model-near':()=>current?.zoom(.8),'model-far':()=>current?.zoom(1.25),'model-flip':()=>current?.flipUp(),'model-close':async()=>{await close();status.textContent='已关闭模型，可选择其他文件。';}};
   Object.entries(actions).forEach(([id,fn])=>document.getElementById(id).addEventListener('click',fn));
   window.addEventListener('pagehide',()=>{void close();},{once:true});
+  return {load, snapshot:()=>current?current.snapshot():Promise.reject(new Error('请先打开模型')), status};
 }

@@ -82,6 +82,12 @@
 .cloud-image-stage img{display:block;width:100%;height:auto}
 .arch-body .cloud-marker{position:absolute;transform:translate(-50%,-50%);width:28px;height:28px;padding:0;border:2px solid var(--surface);border-radius:50%;background:var(--olive);color:var(--surface);font:600 12px/24px var(--sans);box-shadow:0 4px 12px rgba(20,19,11,.35)}
 .cloud-model{position:relative;height:460px;max-height:62vh;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--bg)}
+.cloud-model .cloud-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:grab;touch-action:none}
+.cloud-model .cloud-canvas:active{cursor:grabbing}
+.model-mode{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.model-mode button{border:0;border-radius:0;margin:0}
+.model-mode button[aria-pressed=true]{background:var(--olive);color:var(--surface)}
+.upload-drop.is-dragging{outline:2px dashed var(--olive);outline-offset:4px}
 .review-pair{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;max-width:900px}
 .review-pair.has-compare{grid-template-columns:minmax(0,1fr) minmax(0,1fr);max-width:none}
 .compare-figure img{display:block;width:100%;height:auto;border-radius:6px;border:1px solid var(--line)}

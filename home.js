@@ -1,6 +1,7 @@
 // Home: building tabs drive the specimen stage and the right-hand panel; visitors can add their own model.
-import {initHero} from './hero.js?v=20261103-upload';
+import {initHero} from './hero.js?v=20261103-workflow';
 import {encode} from './cloud-convert.js?v=20261103-upload';
+import {examplesHidden, markExample, restoreControl} from './examples.js?v=20261103-workflow';
 
 const $ = id => document.getElementById(id);
 const ICON = {
@@ -40,6 +41,9 @@ const BUILDINGS = {
 
 let hero = null, heroFailed = false; // hero stays null while the first cloud loads
 let preferPhoto = false; // set by the cloud/image toggle; applies to every building
+// Taken before anything rewrites the note's text: showStart() and status() replace its children,
+// which detaches the counter span, so it must be held here rather than looked up again later.
+const note = $('load-note'), count = $('loader-count'), progress = f => { count.textContent = String(Math.round(f * 100)); };
 function renderPanel({family, name, tags, lede, metrics}, animate, local) {
   $('b-family').textContent = family;
   $('b-name').textContent = name;
@@ -76,9 +80,28 @@ document.querySelectorAll('.thumb[data-building]').forEach(t => t.addEventListen
   // A quick second click skips the running transition; that rejection is expected.
   if (document.startViewTransition) document.startViewTransition(go).ready.catch(() => {}); else go();
 }));
-fill('4906981', false);
+document.querySelectorAll('.thumb[data-building]').forEach(markExample);
+$('model-file').after(restoreControl());
+// With the examples closed the stage starts empty, ready for the visitor's own model.
+const START = {family: 'Your model · Browser preview', name: '模型预览', tags: ['.splat', '.ply', '本机转换'],
+  lede: '上传训练得到的 .splat 或 3DGS .ply 模型，在浏览器中生成可旋转、缩放的点云；项目协作、照片标注与验收请在项目档案中进行。',
+  metrics: [['target', '上传模型', '.splat / .ply'], ['points', '生成点云', '触控板旋转缩放'], ['layers', '建立档案', '项目档案'], ['eye', '截图标注', '人工复核']]};
+function showStart(animate) {
+  document.body.dataset.building = 'none';
+  document.body.dataset.cloud = 'empty';
+  renderPanel(START, animate, false);
+  $('b-exp').hidden = $('b-closeup').hidden = true;
+  syncViewToggle(false);
+  note.textContent = '点击上方“上传模型”，选择 .splat 或 .ply 文件开始预览';
+  note.classList.remove('done');
+}
+if (examplesHidden()) showStart(false); else fill('4906981', false);
+addEventListener('cw:examples', ({detail: {hidden}}) => {
+  const building = document.body.dataset.building;
+  if (hidden && BUILDINGS[building]) showStart(true);
+  else if (!hidden && building === 'none') fill('4906981', true);
+});
 
-const note = $('load-note'), count = $('loader-count'), progress = f => { count.textContent = String(Math.round(f * 100)); };
 // The stage shows the selected building's point cloud, or its render when there is none.
 async function showCloud(id) {
   const {points, photo} = BUILDINGS[id], hasCloud = !!points && !heroFailed;
@@ -103,7 +126,7 @@ function syncViewToggle(available) {
   button.innerHTML = photo ? VIEW_ICON.cloud : VIEW_ICON.photo;
 }
 $('view-mode').onclick = () => {
-  if (document.body.dataset.building === 'local') return;
+  if (!BUILDINGS[document.body.dataset.building]) return;
   preferPhoto = !preferPhoto;
   showCloud(document.body.dataset.building);
 };
@@ -114,8 +137,9 @@ try {
     onReady: () => note.classList.add('done'),
     onAngle: a => { $('angle').textContent = Math.round(a) + '°'; },
   });
-  showCloud(document.body.dataset.building);
+  if (BUILDINGS[document.body.dataset.building]) showCloud(document.body.dataset.building); else if (document.body.dataset.building === 'none') showStart(false);
 } catch (error) {
+  console.error('Hero init failed:', error);
   heroFailed = true;
   syncViewToggle(false);
   note.textContent = '当前浏览器无法显示点云，已显示渲染图。';
@@ -144,7 +168,7 @@ function status(text, done) {
 function convertLocal(file, flip) {
   if (file && !/\.(splat|ply)$/i.test(file.name)) { status('请选择 .splat 或 3DGS 训练输出的 .ply 文件'); setTimeout(() => note.classList.add('done'), 4000); return; }
   if (file && file.size > 1536 * 1024 * 1024) { status('模型文件超过1.5 GB，请先导出较小的展示版本'); setTimeout(() => note.classList.add('done'), 4000); return; }
-  worker ??= new Worker(new URL('./cloud-worker.js?v=20261103-upload', import.meta.url), {type: 'module'});
+  worker ??= new Worker(new URL('./cloud-worker.js?v=20261103-workflow', import.meta.url), {type: 'module'});
   converting = true;
   upload.disabled = $('local-flip').disabled = true;
   status(file ? '正在读取模型 · 0%' : '正在重新生成点云…');
