@@ -18,8 +18,9 @@
 @view-transition{navigation:auto}
 .sidebar{view-transition-name:sidebar}.topbar{view-transition-name:topbar}.stage{view-transition-name:stage}.panel{view-transition-name:panel}
 .side-nav .pill{view-transition-name:nav-pill}
-::view-transition-group(nav-pill){animation-duration:.3s;animation-timing-function:cubic-bezier(.22,1,.36,1);will-change:transform}
-::view-transition-old(nav-pill),::view-transition-new(nav-pill){animation-duration:.16s}
+::view-transition-group(nav-pill){animation-duration:.55s;animation-timing-function:cubic-bezier(.3,.8,.2,1);will-change:transform}
+::view-transition-old(nav-pill){opacity:0;animation:none}
+::view-transition-new(nav-pill){animation:nav-pill-settle .55s linear both}
 ::view-transition-old(stage){animation:vt-fade-out .16s ease-out both}
 ::view-transition-new(stage){animation:vt-stage-in .36s cubic-bezier(.22,1,.36,1) both}
 ::view-transition-old(panel){animation:vt-panel-out .16s ease-out both}
@@ -29,6 +30,7 @@
 @keyframes vt-stage-in{from{opacity:0;transform:translateY(10px)}}
 @keyframes vt-panel-out{to{opacity:0;transform:translateX(8px)}}
 @keyframes vt-panel-in{from{opacity:0;transform:translateX(16px)}}
+@keyframes nav-pill-settle{0%,92.7%{opacity:1}100%{opacity:0}}
 *{box-sizing:border-box}
 html,body{height:100%}
 body{margin:0;background:var(--bg);color:var(--body);font:14.5px/1.6 var(--sans);-webkit-font-smoothing:antialiased;overflow:hidden}
