@@ -1,5 +1,24 @@
 import {rememberProject} from './project-link.js?v=20261103-workflow';
 const $ = id => document.getElementById(id);
+const localDraftKey=()=> 'cw:review-draft:'+state.base+':'+state.id;
+$('save-local-draft').onclick=()=>run(()=>{
+  if(!state.detail||!canEdit())throw Error('请先打开可编辑的项目。');
+  const savedAt=new Date().toISOString();
+  try { localStorage.setItem(localDraftKey(),JSON.stringify({revision:state.detail.project.revision,annotations:state.draft,savedAt})); }
+  catch { throw Error('浏览器无法保存草稿，请使用“下载本次草稿”保留文件。'); }
+  message('草稿已保存在当前浏览器，刷新后可点击“恢复草稿”。保存时间：'+new Date(savedAt).toLocaleString('zh-CN'));
+});
+$('restore-local-draft').onclick=()=>run(()=>{
+  if(!state.detail||!canEdit())throw Error('请先打开可编辑的项目。');
+  const raw=localStorage.getItem(localDraftKey());
+  if(!raw)throw Error('当前浏览器没有这个项目的草稿。');
+  const saved=JSON.parse(raw);
+  if(!Array.isArray(saved.annotations))throw Error('草稿格式无效。');
+  if(!confirm((saved.revision!==state.detail.project.revision?'服务器档案版本已变化，请恢复后核对内容。\n':'')+'恢复 '+new Date(saved.savedAt).toLocaleString('zh-CN')+' 的草稿？当前未保存的标注将被替换。'))return;
+  if(saved.annotations.some(n=>!state.detail.assets.some(a=>a.id===n.asset_id)))throw Error('草稿关联的照片已不在项目中，请先核对项目资料。');
+  state.draft=structuredClone(saved.annotations);state.selected=null;setDirty(true);renderNotes();
+  message('草稿已恢复。确认内容后点击“保存标注到服务器”。');
+});
 $('toggle-admin-key').addEventListener('click',()=>{
   const visible=$('admin-key').type==='password';
   $('admin-key').type=visible?'text':'password';
