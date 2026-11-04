@@ -197,7 +197,7 @@ export function initStandaloneViewer({onChange} = {}) {
     try{await close();host.replaceChildren();abort=new AbortController();
       const url=source instanceof Blob?(fileURL=URL.createObjectURL(source)):source;
       if(closeButton)closeButton.disabled=false;
-      current=await mountSplatViewer(host,{url,name,initialView,format,signal:abort.signal,onProgress:p=>{status.textContent=p.stage==='ready'?name+' · '+p.count.toLocaleString('zh-CN')+'个高斯点，可开始浏览。':p.stage==='reading'?'正在读取模型'+(p.percent===null?'…':' '+p.percent+'%'):'正在准备三维渲染，请稍候…';}});
+      current=await mountSplatViewer(host,{url,name,initialView,format,signal:abort.signal,onProgress:p=>{status.textContent=p.stage==='ready'?name+' · '+p.count.toLocaleString('zh-CN')+'个高斯点，可开始浏览。':p.stage==='reading'?(source instanceof Blob?'正在处理模型':'正在下载模型')+(p.percent===null?'…':' '+p.percent+'%'):'正在准备三维渲染，请稍候…';}});
       controls.forEach(b=>b.disabled=false);onChange?.(true);
     }catch(error){await close();status.textContent=error.name==='AbortError'?'已取消模型加载。':'模型打开失败：'+error.message;}
     finally{input.disabled=false;if(demo)demo.disabled=false;if(light)light.disabled=false;}

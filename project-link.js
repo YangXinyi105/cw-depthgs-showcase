@@ -28,10 +28,28 @@ export async function projectDetail(p, signal) {
   return response.json();
 }
 
-export async function assetBlob(p, asset, signal) {
+export async function assetBlob(p, asset, signal, onProgress) {
   const response = await fetch(url(p, '/assets/' + encodeURIComponent(asset.id) + '/file'), {headers: headers(p), referrerPolicy: 'no-referrer', signal});
   if (!response.ok) throw await failure(response, '文件读取失败');
-  return response.blob();
+  if (!onProgress || !response.body) return response.blob();
+  const size = Number(asset.size) || Number(response.headers.get('content-length'));
+  const total = Number.isFinite(size) && size > 0 ? size : null;
+  const reader = response.body.getReader(), chunks = [];
+  let loaded = 0;
+  onProgress({loaded, total, percent: total ? 0 : null});
+  try {
+    while (true) {
+      const {done, value} = await reader.read();
+      if (done) break;
+      chunks.push(value); loaded += value.byteLength;
+      onProgress({loaded, total, percent: total ? Math.min(99, Math.floor(loaded / total * 100)) : null});
+    }
+    onProgress({loaded, total: loaded, percent: 100});
+    return new Blob(chunks, {type: response.headers.get('content-type') || 'application/octet-stream'});
+  } catch (error) {
+    await reader.cancel().catch(() => {});
+    throw error;
+  } finally { reader.releaseLock(); }
 }
 
 export async function uploadAsset(p, blob, name, kind, actor = '项目成员') {

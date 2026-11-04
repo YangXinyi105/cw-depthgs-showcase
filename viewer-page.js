@@ -1,8 +1,8 @@
 // 三维浏览: the example models, a local .splat, and the models of the project opened in 项目档案.
 // A view of an open model can be saved to that project as a photo for annotation.
-import {initStandaloneViewer} from './viewer.js?v=20261103-workflow';
+import {initStandaloneViewer} from './viewer.js?v=20261104-download-progress';
 import {markExample, restoreControl} from './examples.js?v=20261103-workflow';
-import {currentProject, projectDetail, assetBlob, uploadAsset, canEditProject} from './project-link.js?v=20261103-workflow';
+import {currentProject, projectDetail, assetBlob, uploadAsset, canEditProject} from './project-link.js?v=20261104-download-progress';
 
 const $ = id => document.getElementById(id);
 const project = currentProject();
@@ -42,9 +42,14 @@ async function listProjectModels() {
 }
 async function openProjectModel(asset, card) {
   document.querySelectorAll('.project-model').forEach(c => { c.disabled = true; });
-  viewer.status.textContent = '正在从项目读取模型 ' + asset.name + '…';
+  viewer.status.textContent = '正在连接项目服务，准备下载模型…';
   try {
-    const blob = await assetBlob(project, asset);
+    const mb = bytes => (bytes / 1024 / 1024).toFixed(1) + ' MB';
+    const blob = await assetBlob(project, asset, undefined, ({loaded, total, percent}) => {
+      viewer.status.textContent = percent === 100
+        ? '模型下载完成 100%，正在准备渲染…'
+        : '正在下载模型 ' + (percent === null ? '' : percent + '% · ') + mb(loaded) + (total ? ' / ' + mb(total) : '') + ' · ' + asset.name;
+    });
     await viewer.load(new File([blob], asset.name), asset.name);
     openModel = {name: asset.name, fromProject: true};
     snap.disabled = !canEditProject(project);
