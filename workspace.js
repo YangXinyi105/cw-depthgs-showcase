@@ -110,8 +110,20 @@
     ui.render.stage.querySelectorAll('.ws-marker').forEach(n=>n.remove());
     if (!building.local) loadImage(ui.reference,view.reference,building.name+' '+view.label+' 参考照片',token);
     loadImage(ui.render,view.render,building.name+' '+view.label+(building.local?' 现场照片':' 重建渲染'),token);
+    setReference('');
     updateList(); notify('已打开 '+building.name+' · '+view.label+'。');
     root.dispatchEvent(new CustomEvent('ws:view',{detail:{building,view}}));
+  }
+  function setReference(id) {
+    const ref = building.local && building.views.find(v => v.id === id && v.id !== view.id);
+    const paired = !building.local || !!ref;
+    ui.reference.figure.hidden = !paired;
+    ui.comparison.classList.toggle('ws-local-photo', !paired);
+    ui.render.figure.querySelector('figcaption').textContent = '复核图 · 点击添加标注';
+    ui.storage.textContent = building.project ? '标注先保存在浏览器，点击“保存标注到项目”后同步到项目档案。' : '标注保存在浏览器，可下载 JSON 档案备份。';
+    if (ref) loadImage(ui.reference, ref.render, ref.label, viewToken);
+    root.dispatchEvent(new CustomEvent('ws:comparison', {detail:{paired, reference:ref ? ref.render : view.reference, render:view.render}}));
+    return paired;
   }
   function addNote(x,y) {
     if (!ui.render.image.naturalWidth || ui.render.image.hidden) { notify('图像加载完成后才能添加标注。',true); return; }
@@ -130,7 +142,7 @@
     notes.forEach((n,i)=>{
       const row=el('li',null,{class:'ws-note-row'});
       row.append(button('标注 '+(i+1),()=>{selected=n.id;updateList();ui.note.focus();},'ws-note-select'));
-      row.append(el('p',n.note || '尚未填写说明',{class:'ws-note-text'}));
+      row.append(el('p',(building.formatNote ? building.formatNote(n.note) : n.note) || '尚未填写说明',{class:'ws-note-text'}));
       const status=el('select',null,{'aria-label':'标注'+(i+1)+'复核状态'}); ['待复核','已复核'].forEach(s=>status.append(el('option',s,{value:s})));status.value=n.status;
       status.addEventListener('change',()=>{n.status=status.value;persist(building.id,view.id,notes); if(selected===n.id)ui.status.value=n.status;notify('复核状态已更新。');});
       row.append(status,button('删除',()=>{notes.splice(notes.indexOf(n),1);if(selected===n.id)selected=null;persist(building.id,view.id,notes);updateList();notify('标注已删除。');},'ws-delete'));
@@ -255,7 +267,7 @@
   // from the project's annotations; the page saves them back with notesOf().
   function openCollection(c) {
     if (!manifest || !ui) throw Error('工作台尚未就绪');
-    const b = {id: c.id, name: c.name, local: true, project: true, source: c.source,
+    const b = {id: c.id, name: c.name, local: true, project: true, source: c.source, formatNote: c.formatNote,
       views: c.views.map(v => ({id: v.id, label: v.label, reference: v.url, render: v.url}))};
     c.views.forEach(v => {
       localAssets.add(v.url);
@@ -269,7 +281,7 @@
     const b = manifest?.buildings.find(x => x.id === id);
     return b ? Object.fromEntries(b.views.map(v => [v.id, loadNotes(b.id, v.id)])) : {};
   }
-  window.cwWorkspace = {openCollection, notesOf};
+  window.cwWorkspace = {openCollection, notesOf, setReference, selectView};
   window.initWorkspace=initWorkspace;
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initWorkspace);else initWorkspace();
 })();

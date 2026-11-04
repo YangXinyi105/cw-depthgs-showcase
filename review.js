@@ -5,6 +5,7 @@
   const LABEL = {best_delta: '差值最好', median_delta: '差值中位', worst_delta: '差值最差'};
   const COVER = {all: 'assets/cases/4906981/00000-render.png', '4906981': 'assets/cases/4906981/00007-render.png', '4959323': 'assets/cases/4959323/00008-render.png', pilot: 'assets/cases/pilot/00006-render.png'};
   let cards = [], items = [], active = 0, filter = 'all', mode = 'pair', mounting = null;
+  let paired = true;
   let link = null, project = null, collection = '', dirty = false;
   const el = (tag, cls, text) => { const n = document.createElement(tag); if (cls) n.className = cls; if (text !== undefined) n.textContent = text; return n; };
   const shown = () => items.filter(it => filter === 'all' || it.building.id === filter);
@@ -57,6 +58,13 @@
     mounting ||= workspaceReady().then(root => {
       const [selects] = root.querySelectorAll(':scope > .ws-controls');
       $('tool-hidden').append(selects);
+      const controls = el('div', 'review-photo-controls'); controls.id = 'review-photo-controls';
+      for (const [id, label] of [['review-target','复核图'],['review-reference','对照图']]) {
+        const wrap=el('label','',label), select=el('select'); select.id=id; wrap.append(select); controls.append(wrap);
+      }
+      $('stage-pair').before(controls);
+      $('review-target').onchange=()=>window.cwWorkspace.selectView($('review-target').value);
+      $('review-reference').onchange=()=>{window.cwWorkspace.setReference($('review-reference').value);setMode('pair');};
       $('stage-pair').append(root.querySelector(':scope > .ws-comparison'));
       $('stage-panel').append(...root.children);
       return root;
@@ -101,7 +109,9 @@
       const notes = {};
       detail.annotations.forEach(n => (notes[n.asset_id] ||= []).push(n));
       collection = 'project-' + project.id; dirty = false;
-      window.cwWorkspace.openCollection({id: collection, name: detail.project.name,
+      const names = new Map([...detail.assets, ...(detail.versions || [])].map(a=>[a.id,a.name || a.label || a.version || '重建版本']));
+      const formatNote = text => (text || '').replace(/[a-f0-9]{32}/g, id => names.get(id) || id);
+      window.cwWorkspace.openCollection({formatNote, id: collection, name: detail.project.name,
         source: '项目档案「' + detail.project.name + '」中的照片与视角截图，标注可保存回项目。',
         views: photos.map((a, i) => ({id: a.id, label: a.name, url: URL.createObjectURL(blobs[i])})), notes});
       $('save-state').textContent = link.canEditProject(project) ? '' : '只读分享链接：可查看标注，不能保存修改。';
@@ -126,7 +136,7 @@
   }
   function closeReview() { transition(() => { document.body.dataset.state = 'pick'; layout(); }); }
   function setMode(next) {
-    mode = next;
+    mode = next === 'slider' && !paired ? 'pair' : next;
     $('stage-pair').hidden = mode !== 'pair';
     $('stage-slider').hidden = mode !== 'slider';
     document.querySelectorAll('#mode-switch button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.mode === mode)));
@@ -200,14 +210,27 @@
       const {building, view} = e.detail;
       $('stage-title').textContent = building.name + ' · ' + view.label;
       $('slider-ref').src = view.reference; $('slider-render').src = view.render;
-      const sliderMode = document.querySelector('#mode-switch [data-mode="slider"]');
-      sliderMode.disabled = !!building.local;
-      sliderMode.title = building.local ? '现场照片没有对应的重建渲染，仅支持并排标注' : '';
-      if (building.local && mode === 'slider') setMode('pair');
+      const target=$('review-target'), reference=$('review-reference');
+      if (target) {
+        target.replaceChildren(...building.views.map(v=>new Option(v.label,v.id))); target.value=view.id;
+        reference.replaceChildren(new Option(building.local ? '不对照（单图标注）' : '示例参考照片',''),
+          ...(building.local ? building.views.filter(v=>v.id!==view.id).map(v=>new Option(v.label,v.id)) : []));
+        reference.disabled=!building.local; reference.title='选择同一视角的照片或渲染图进行对照';
+      }
+      window.cwWorkspace.setReference('');
+      $('save-state').textContent = building.id === collection ? (dirty ? '有尚未保存到项目的标注' : '项目标注已读取') : '浏览器草稿';
       // Local photos picked from the start screen open straight into the review stage.
       if (building.local && document.body.dataset.state === 'pick') transition(() => { document.body.dataset.state = 'review'; setMode('pair'); });
       $('save-project').hidden = building.id !== collection || !link?.canEditProject(project);
       syncSave();
+    });
+    $('workspace-root').addEventListener('ws:comparison', e => {
+      paired=e.detail.paired;
+      $('slider-ref').src=e.detail.reference; $('slider-render').src=e.detail.render;
+      document.querySelector('#mode-switch [data-mode="pair"]').textContent=paired?'并排标注':'单图标注';
+      document.querySelector('#mode-switch [data-mode="slider"]').disabled=!paired;
+      $('stage-slider').querySelector('.lab.r').textContent='复核图';
+      if (!paired) setMode('pair');
     });
     $('workspace-root').addEventListener('ws:notes', e => { if (e.detail.building === collection) { dirty = true; syncSave(); } });
     $('save-project').onclick = saveProject;
