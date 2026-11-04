@@ -5,6 +5,21 @@
     if (navigation?.type === 'navigate' && document.referrer && new URL(document.referrer).origin === location.origin) document.documentElement.classList.add('nav-arrival');
   } catch {}
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const navLinks = [...document.querySelectorAll('.side-nav a')];
+  const currentNav = navLinks.findIndex(link => link.getAttribute('aria-current') === 'page');
+  let previousNav = -1;
+  try { previousNav = Number(sessionStorage.getItem('cw:nav-from')); sessionStorage.removeItem('cw:nav-from'); } catch {}
+  navLinks.forEach((link, index) => link.addEventListener('click', event => {
+    if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    try { sessionStorage.setItem('cw:nav-from', String(index)); } catch {}
+  }));
+  if (!reduce && document.documentElement.classList.contains('nav-arrival') && previousNav >= 0 && previousNav !== currentNav && navLinks[previousNav] && navLinks[currentNav]) {
+    const pill = navLinks[currentNav].querySelector('.pill');
+    if (pill) {
+      const offset = navLinks[previousNav].getBoundingClientRect().top - navLinks[currentNav].getBoundingClientRect().top;
+      pill.animate([{transform:`translateY(${offset}px)`},{transform:'translateY(0)'}],{duration:550,easing:'cubic-bezier(.3,.8,.2,1)'});
+    }
+  }
   const routes = [
     [/首页|总览|主页|home|overview/i, 'index.html'],
     [/三维|模型|浏览|splat|viewer|3d/i, 'viewer.html'],
