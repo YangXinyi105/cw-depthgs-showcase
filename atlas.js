@@ -9,9 +9,26 @@
   const currentNav = navLinks.findIndex(link => link.getAttribute('aria-current') === 'page');
   let previousNav = -1;
   try { previousNav = Number(sessionStorage.getItem('cw:nav-from')); sessionStorage.removeItem('cw:nav-from'); } catch {}
-  navLinks.forEach((link, index) => link.addEventListener('click', event => {
+  let navAnimation = null;
+  let navSequence = 0;
+  navLinks.forEach((link, index) => link.addEventListener('click', async event => {
     if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-    try { sessionStorage.setItem('cw:nav-from', String(currentNav)); } catch {}
+    if (reduce || index === currentNav) return;
+    const pill = navLinks[currentNav]?.querySelector('.pill');
+    if (!pill) return;
+    event.preventDefault();
+    const sequence = ++navSequence;
+    const from = pill.getBoundingClientRect(), target = link.getBoundingClientRect();
+    const origin = navLinks[currentNav].getBoundingClientRect();
+    navAnimation?.cancel();
+    navAnimation = pill.animate([
+      {transform:'translate('+ (from.left-origin.left)+'px,'+(from.top-origin.top)+'px)'},
+      {transform:'translate('+ (target.left-origin.left)+'px,'+(target.top-origin.top)+'px)'}
+    ], {duration:550,easing:'cubic-bezier(.3,.8,.2,1)',fill:'forwards'});
+    try { await navAnimation.finished; } catch { return; }
+    if (sequence !== navSequence) return;
+    try { sessionStorage.setItem('cw:nav-from', String(index)); } catch {}
+    location.assign(link.href);
   }));
   if (!reduce && document.documentElement.classList.contains('nav-arrival') && previousNav >= 0 && previousNav !== currentNav && navLinks[previousNav] && navLinks[currentNav]) {
     const pill = navLinks[currentNav].querySelector('.pill');
