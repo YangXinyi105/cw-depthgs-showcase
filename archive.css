@@ -61,6 +61,7 @@
 .asset-meta{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;margin-top:3px!important;color:var(--muted);font-size:12.5px}
 .pill{display:inline-flex;align-items:center;height:22px;padding:0 9px;border-radius:999px;background:var(--tag);color:var(--tag-ink);font-size:11.5px;white-space:nowrap}
 .pill.ok{background:var(--sage);color:var(--olive)}.pill.warn{background:#efe2cf;color:#6e5124}.pill.info{background:var(--tag);color:var(--tag-ink)}
+.side-nav .pill{display:block;height:auto;padding:0;border-radius:10px;background:var(--sage)}
 #share-result{margin:8px 0 14px;padding:14px;border:1px solid var(--line);border-radius:8px;background:var(--bg)}
 #share-result input{margin:8px 0}
 .capture-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:6px 0 4px}
