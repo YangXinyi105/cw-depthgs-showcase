@@ -11,7 +11,7 @@
   try { previousNav = Number(sessionStorage.getItem('cw:nav-from')); sessionStorage.removeItem('cw:nav-from'); } catch {}
   navLinks.forEach((link, index) => link.addEventListener('click', event => {
     if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-    try { sessionStorage.setItem('cw:nav-from', String(index)); } catch {}
+    try { sessionStorage.setItem('cw:nav-from', String(currentNav)); } catch {}
   }));
   if (!reduce && document.documentElement.classList.contains('nav-arrival') && previousNav >= 0 && previousNav !== currentNav && navLinks[previousNav] && navLinks[currentNav]) {
     const pill = navLinks[currentNav].querySelector('.pill');
