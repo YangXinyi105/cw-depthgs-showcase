@@ -1,4 +1,10 @@
 /* 项目档案 in the Atlas tokens: one pane at a time inside the stage, project summary in the panel. */
+.key-input{position:relative;display:block}
+.arch-body .key-input input{padding-right:48px}
+.arch-body .key-input button{position:absolute;right:4px;top:50%;transform:translateY(-50%);width:36px;height:34px;padding:7px;border:0;background:transparent;color:var(--olive)}
+.key-input svg{width:22px;height:22px}
+.key-input .eye-slash{display:none}
+.key-input button[aria-pressed=true] .eye-slash{display:block}
 .archive-page .stage{display:flex;flex-direction:column;gap:14px}
 .arch-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px}
 .arch-head h1{font-size:clamp(30px,2.8vw,42px);line-height:1.05;overflow-wrap:anywhere}

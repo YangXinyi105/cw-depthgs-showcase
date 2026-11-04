@@ -5,7 +5,7 @@
 <meta name="description" content="建筑项目档案：采集批次、质量提示、重建版本、复核标注、验收结论与AI辅助分析的闭环管理。">
 <meta name="theme-color" content="#f8f5ea">
 <link rel="preload" href="assets/fonts/eb-garamond.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="fonts.css?v=20261027-atlas"><link rel="stylesheet" href="application.css?v=20261104-nav-unified"><link rel="stylesheet" href="archive.css?v=20261104-nav-fix"><link rel="stylesheet" href="viewer.css?v=20261103-workflow">
+<link rel="stylesheet" href="fonts.css?v=20261027-atlas"><link rel="stylesheet" href="application.css?v=20261104-nav-unified"><link rel="stylesheet" href="archive.css?v=20261104-key-eye"><link rel="stylesheet" href="viewer.css?v=20261103-workflow">
 <link rel="icon" type="image/svg+xml" href="assets/logo-mark.svg"><script>try{if(localStorage.getItem("cw:hide-examples")==="1")document.documentElement.setAttribute("data-hide-examples","")}catch(e){}</script></head>
 <body class="archive-page">
 <a class="skip" href="#main">跳到主要内容</a>
@@ -27,7 +27,7 @@
   <div class="arch-body scroll reveal d3">
    <div class="pane" data-pane="connect"><section id="connection-panel" class="archive-section">
   <h2>连接项目服务</h2><p id="connection-help">演示服务地址已填入，管理员输入管理密钥即可连接。查看人员通过项目的只读分享链接直接打开，无需填写密钥。</p>
-  <form id="connect-form" class="archive-form"><label>项目服务地址<input id="api-base" type="url" placeholder="https://api.example.com" required></label><label>管理密钥<input id="admin-key" type="password" autocomplete="off" placeholder="仅项目管理员填写" required></label><button type="submit">连接服务</button></form>
+  <form id="connect-form" class="archive-form"><label>项目服务地址<input id="api-base" type="url" placeholder="https://api.example.com" required></label><label>管理密钥<span class="key-input"><input id="admin-key" type="password" autocomplete="off" placeholder="仅项目管理员填写" required><button id="toggle-admin-key" type="button" aria-label="显示管理密钥" title="显示管理密钥" aria-pressed="false" aria-controls="admin-key"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2.5 12s3.5-6.5 9.5-6.5 9.5 6.5 9.5 6.5-3.5 6.5-9.5 6.5S2.5 12 2.5 12z"/><circle cx="12" cy="12" r="2.8"/><path class="eye-slash" d="M4 4l16 16"/></svg></button></span></label><button type="submit">连接服务</button></form>
  </section><section id="project-list-panel" class="archive-section" hidden>
   <div class="section-tools"><h2>项目列表</h2><button id="disconnect" type="button">断开服务</button></div>
   <div id="project-list" class="project-list"></div>
@@ -75,5 +75,5 @@
  </aside>
 </div>
 <script src="atlas.js?v=20261104-slide-visible"></script>
-<script src="service-config.js?v=20261027"></script><script type="module" src="archive.js?v=20261104-closure"></script>
+<script src="service-config.js?v=20261027"></script><script type="module" src="archive.js?v=20261104-key-eye"></script>
 </body></html>

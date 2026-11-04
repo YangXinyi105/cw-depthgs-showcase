@@ -1,5 +1,13 @@
 import {rememberProject} from './project-link.js?v=20261103-workflow';
 const $ = id => document.getElementById(id);
+$('toggle-admin-key').addEventListener('click',()=>{
+  const visible=$('admin-key').type==='password';
+  $('admin-key').type=visible?'text':'password';
+  const button=$('toggle-admin-key'),label=visible?'隐藏管理密钥':'显示管理密钥';
+  button.setAttribute('aria-pressed',String(visible));
+  button.setAttribute('aria-label',label);
+  button.title=label;
+});
 const state = {base:'',admin:'',token:'',id:'',detail:null,draft:[],dirty:false,asset:null,blob:null,viewer:null,pendingMount:null,assetAbort:null,loadId:0,projectSeq:0,projectAbort:null,projectLoading:false,mutation:false,navigation:false,sharedMode:'',share:'',edit:'',selected:null,compareAbort:null,compareURL:'',compareId:'',modelMode:'splat',modelCache:null,modelDownload:null};
 const ACTIONS = {created:'建立档案',metadata_updated:'更新资料',asset_uploaded:'上传文件',annotations_saved:'保存标注',share_rotated:'更新分享权限',capture_saved:'保存采集任务',task_exported:'导出重建任务包',version_registered:'登记重建版本',acceptance_saved:'保存验收结论',analysis_generated:'生成项目分析',workflow_updated:'更新项目流程'};
 let cleanupQueue=Promise.resolve(),acceptedHash=location.hash;
