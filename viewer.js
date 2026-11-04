@@ -42,13 +42,13 @@ function inspectModel(bytes) {
       if (!Number.isFinite(value) || Math.abs(value) > 1e9 || (k >= 3 && value <= 0)) throw new Error('模型包含无效位置或尺度数据。');
     }
     if ([28,29,30,31].every(k=>bytes[p+k]===128)) throw new Error('模型包含无效的旋转四元数。');
-    if (bytes[p + 27] > 4) {
+    if (bytes[p + 27] > 0) {
       visible++;
       if (i % stride === 0) for (let k = 0; k < 3; k++) axes[k].push(data.getFloat32(p + k * 4, true));
     }
   }
   if (!visible) throw new Error('模型中的高斯点均为透明，无法显示。');
-  if (!axes[0].length) for (let i = 0; i < count; i++) if (bytes[i * 32 + 27] > 4) { for (let k = 0; k < 3; k++) axes[k].push(data.getFloat32(i * 32 + k * 4, true)); break; }
+  if (!axes[0].length) for (let i = 0; i < count; i++) if (bytes[i * 32 + 27] > 0) { for (let k = 0; k < 3; k++) axes[k].push(data.getFloat32(i * 32 + k * 4, true)); break; }
   // Percentile framing keeps isolated distant floaters from hiding the main scene.
   const lower=[],upper=[];
   for (const axis of axes) { axis.sort((a,b)=>a-b); lower.push(axis[Math.floor((axis.length-1)*.02)]); upper.push(axis[Math.ceil((axis.length-1)*.98)]); }
@@ -159,8 +159,11 @@ export async function mountSplatViewer(container, {url, name = '三维模型', o
     modelURL=URL.createObjectURL(new Blob([bytes],{type:'application/octet-stream'}));
     onProgress?.({stage:'preparing',percent:null,bytes:bytes.byteLength});
     // The vendor can leave its load promise pending if disposed during worker setup.
-    await Promise.race([viewer.addSplatScene(modelURL,{format:format==='ksplat'?GS.SceneFormat.KSplat:GS.SceneFormat.Splat,showLoadingUI:false,progressiveLoad:false,splatAlphaRemovalThreshold:1,
-      onProgress:percent=>{if(!disposed&&!signal?.aborted)onProgress?.({stage:'preparing',percent:Number.isFinite(percent)?Math.round(percent):null,bytes:bytes.byteLength});}}),cancelled]);
+    const loading=viewer.addSplatScene(modelURL,{format:format==='ksplat'?GS.SceneFormat.KSplat:GS.SceneFormat.Splat,showLoadingUI:false,progressiveLoad:false,splatAlphaRemovalThreshold:1,
+      onProgress:percent=>{if(!disposed&&!signal?.aborted)onProgress?.({stage:'preparing',percent:Number.isFinite(percent)?Math.round(percent):null,bytes:bytes.byteLength});}});
+    // The vendor's AbortablePromise.then ignores the rejection callback used by
+    // Promise.race. Await its native promise so cancelling a load is handled.
+    await Promise.race([loading.promise||loading,cancelled]);
     rejectLoading=undefined;
     signal?.throwIfAborted(); if(disposed)throw new DOMException('模型加载已取消','AbortError');
     viewer.controls.target.copy(target);viewer.controls.update();viewer.start();

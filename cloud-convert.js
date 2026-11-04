@@ -113,11 +113,15 @@ function mulberry32(seed) {
 }
 
 // Same steps and defaults as the Python script; `flip` turns the detected up axis over.
-export function convert(g, {points = 160000, minAlpha = 0.08, extent = 9, flip = false, seed = 0} = {}) {
+export function convert(g, {points = 160000, minAlpha = null, extent = 9, flip = false, seed = 0} = {}) {
   const P = g.position;
   let idx = new Uint32Array(g.count).map((_, i) => i);
   idx = filter(idx, i => Number.isFinite(P[i * 3]) && Number.isFinite(P[i * 3 + 1]) && Number.isFinite(P[i * 3 + 2])
-    && Number.isFinite(g.size[i]) && g.size[i] > 0 && g.alpha[i] >= minAlpha);
+    && Number.isFinite(g.size[i]) && g.size[i] > 0 && Number.isFinite(g.alpha[i]) && g.alpha[i] > 0);
+  const visible=filter(idx,i=>g.alpha[i]>=(minAlpha??0.08));
+  // Light previews can contain only low-opacity Gaussians. Keep valid points
+  // when the default noise filter would remove the whole model.
+  if(minAlpha!==null||visible.length>=1000)idx=visible;
   if (idx.length < 1000) throw Error('可见高斯点不足1000个，无法生成点云');
   const [maxSize] = quantiles(idx, i => g.size[i], [99.5]);
   idx = filter(idx, i => g.size[i] <= maxSize);

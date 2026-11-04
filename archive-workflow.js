@@ -22,7 +22,7 @@ export function installWorkflow({state,canEdit,el,message,run,showPane,chooseAss
     try {
       const saved=read(),different=saved&&!sameNotes(saved.annotations,state.detail.annotations);
       $('draft-resume').hidden=!different;$('draft-discard').hidden=!saved;
-      $('draft-notice').textContent=saved?(different?'本机有未提交的草稿':'本机草稿与服务器一致')+' · '+new Date(saved.savedAt).toLocaleString('zh-CN')+(saved.revision!==state.detail.project.revision?' · 服务器版本已变化，恢复前请核对':''):'复核问题填写后自动保存到本机；提交给其他成员仍需点击“保存标注到服务器”。';
+      $('draft-notice').textContent=saved?(different?'本机有未提交的草稿':'本机草稿与服务器一致')+' · '+new Date(saved.savedAt).toLocaleString('zh-CN')+(saved.revision!==state.detail.project.revision?' · 服务器版本已变化，恢复前请核对':''):'填写时自动保存草稿。点击“保存标注到服务器”后，其他成员可看到修改。';
     } catch {$('draft-notice').textContent='本机草稿无法读取，请使用“下载本次草稿”保留文件。';}
   }
   function persist(manual=false){
@@ -53,7 +53,7 @@ export function installWorkflow({state,canEdit,el,message,run,showPane,chooseAss
     if(!canEdit()||state.mutation||state.projectLoading)throw Error('请先打开可编辑的项目并等待当前操作完成。');
     if(!saved)throw Error('当前浏览器没有这个项目的草稿。');
     const notes=validate(saved),revision=saved.revision??saved.project?.revision;
-    if(!confirm((revision!==state.detail.project.revision?'服务器版本与草稿不同，请核对其他成员的修改。\n':'')+'恢复草稿将替换本页的复核问题，尚不会写入服务器。是否继续？'))return;
+    if(!confirm((revision!==state.detail.project.revision?'服务器版本与草稿不同，请核对其他成员的修改。\n':'')+'恢复草稿将替换本页复核问题；点击保存后同步到服务器。现在恢复？'))return;
     state.draft=notes;state.selected=null;basisRevision=revision??state.detail.project.revision;
     setDirty(true);renderNotes();persist();showPane('review');message('草稿已恢复，请核对后提交服务器。');
   }
@@ -99,7 +99,7 @@ export function installWorkflow({state,canEdit,el,message,run,showPane,chooseAss
   $('board-query').addEventListener('input',renderBoard);$('board-status').addEventListener('change',renderBoard);
   $('save-local-draft').onclick=()=>run(()=>persist(true));
   $('restore-local-draft').onclick=$('draft-resume').onclick=()=>run(()=>restore(read()));
-  $('draft-discard').onclick=()=>run(()=>{if(!confirm('删除当前项目的本机草稿？服务器记录和本页内容不会删除。'))return;clearTimeout(timer);pending=null;localStorage.removeItem(key());updateNotice();});
+  $('draft-discard').onclick=()=>run(()=>{if(!confirm('删除当前项目的本机草稿？保留本页内容和服务器记录。'))return;clearTimeout(timer);pending=null;localStorage.removeItem(key());updateNotice();});
   $('draft-import-button').onclick=()=>$('draft-import-file').click();
   $('draft-import-file').onchange=()=>run(async()=>{
     const file=$('draft-import-file').files[0];$('draft-import-file').value='';if(!file)return;

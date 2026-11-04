@@ -13,11 +13,12 @@ try{
   const id='a'.repeat(32),now=new Date().toISOString();
   let detail={role:'edit',project:{id,name:'体验回归测试',capture_date:'2026-11-04',revision:1,updated_at:now},stage:{label:'待复核',index:4,steps:['待采集','已采集','重建中','待复核','已交付']},assets:[{id:'p1',name:'正面.png',kind:'photo',size:500},{id:'p2',name:'背面.png',kind:'photo',size:500}],capture:{confirmed:true,target_views:2},versions:[{id:'v1',label:'v1',method:'CW-DepthGS',status:'待复核',psnr:null,ssim:null,lpips:null,train_seconds:null}],acceptance:{status:'待复核'},annotations:[{id:'11111111-1111',asset_id:'p2',x:.5,y:.5,note:'旧版普通备注\n第二行',status:'待复核'}],history:[],analysis:null};
   const page=await browser.newPage({viewport:{width:1440,height:1000}}),errors=[];page.on('pageerror',e=>errors.push(e.message));
-  page.on('dialog',d=>d.accept());let conflict=false,uploadRequests=0;
+  page.on('dialog',d=>d.accept());let conflict=false,uploadRequests=0,writeRequests=0;
   const image=fs.readFileSync(path.join(root,'assets/cases/4906981/00000-reference.png'));
   await page.route('https://test.invalid/**',async route=>{
     const req=route.request();if(req.url().endsWith('/file'))return route.fulfill({contentType:'image/png',body:image});
     if(req.method()==='PUT'){
+      writeRequests++;
       if(conflict)return route.fulfill({status:409,json:{detail:'conflict'}});
       detail.annotations=req.postDataJSON().annotations;detail.project.revision++;
     }
@@ -40,6 +41,12 @@ try{
   await page.locator('#board-list button').click();
   await page.locator('#note-form').waitFor({state:'visible'});
   assert.equal(await page.locator('#note-text').inputValue(),'檐口需要补拍\n第二行说明\n负责人：这里是描述文字');
+  // The real service limits the whole serialized record to 2000 characters.
+  await page.locator('#note-text').fill('测'.repeat(1200));await page.locator('#note-action').fill('记'.repeat(800));
+  const writesBefore=writeRequests;await page.locator('#save-notes').click();assert.equal(writeRequests,writesBefore);
+  assert.equal(await page.locator('#note-text').evaluate(n=>n.checkValidity()),false);
+  await page.locator('#note-text').fill('檐口需要补拍\n第二行说明\n负责人：这里是描述文字');await page.locator('#note-action').fill('');
+  assert.equal(await page.locator('#note-text').evaluate(n=>n.checkValidity()),true);
   // Direct server save also commits the active editor after normal form validation.
   await page.locator('#save-notes').click();
   await page.getByText('标注已保存到服务器，其他成员刷新即可查看。',{exact:true}).waitFor();
@@ -66,6 +73,7 @@ try{
   assert.match(await page.locator('#upload-check').innerText(),/格式不支持/);assert.equal(uploadRequests,0);
   // Read-only projects never offer local draft editing or an editable issue form.
   await page.goto(base+'/archive.html#api=https://test.invalid&project='+id+'&share=reader');
+  await page.waitForFunction(()=>!document.getElementById('main').inert&&document.getElementById('access-mode').textContent.includes('只读'));
   await page.locator('#project-panel').waitFor({state:'visible'});assert.equal(await page.locator('.draft-tools').isVisible(),false);
   await page.getByRole('tab',{name:'复核交付',exact:true}).click();assert.equal(await page.locator('#note-form').isVisible(),false);
   await page.setViewportSize({width:390,height:844});
