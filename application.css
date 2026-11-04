@@ -18,16 +18,17 @@
 @view-transition{navigation:auto}
 .sidebar{view-transition-name:sidebar}.topbar{view-transition-name:topbar}.stage{view-transition-name:stage}.panel{view-transition-name:panel}
 .side-nav .pill{view-transition-name:nav-pill}
-::view-transition-group(nav-pill){animation-duration:.55s;animation-timing-function:cubic-bezier(.3,.8,.2,1)}
-::view-transition-old(stage){animation:vt-fade-out .3s ease both}
-::view-transition-new(stage){animation:vt-stage-in .7s cubic-bezier(.2,.75,.2,1) .05s both}
-::view-transition-old(panel){animation:vt-panel-out .3s ease both}
-::view-transition-new(panel){animation:vt-panel-in .7s cubic-bezier(.2,.75,.2,1) .12s both}
+::view-transition-group(nav-pill){animation-duration:.3s;animation-timing-function:cubic-bezier(.22,1,.36,1);will-change:transform}
+::view-transition-old(nav-pill),::view-transition-new(nav-pill){animation-duration:.16s}
+::view-transition-old(stage){animation:vt-fade-out .16s ease-out both}
+::view-transition-new(stage){animation:vt-stage-in .36s cubic-bezier(.22,1,.36,1) both}
+::view-transition-old(panel){animation:vt-panel-out .16s ease-out both}
+::view-transition-new(panel){animation:vt-panel-in .36s cubic-bezier(.22,1,.36,1) .03s both}
 ::view-transition-old(root),::view-transition-new(root){animation:none}
-@keyframes vt-fade-out{to{opacity:0;filter:blur(4px)}}
-@keyframes vt-stage-in{from{opacity:0;transform:translateY(22px) scale(.985);filter:blur(8px)}}
-@keyframes vt-panel-out{to{opacity:0;transform:translateX(16px)}}
-@keyframes vt-panel-in{from{opacity:0;transform:translateX(36px)}}
+@keyframes vt-fade-out{to{opacity:0}}
+@keyframes vt-stage-in{from{opacity:0;transform:translateY(10px)}}
+@keyframes vt-panel-out{to{opacity:0;transform:translateX(8px)}}
+@keyframes vt-panel-in{from{opacity:0;transform:translateX(16px)}}
 *{box-sizing:border-box}
 html,body{height:100%}
 body{margin:0;background:var(--bg);color:var(--body);font:14.5px/1.6 var(--sans);-webkit-font-smoothing:antialiased;overflow:hidden}
@@ -137,6 +138,8 @@ p{margin:0 0 12px}
 @keyframes rise{to{opacity:1;transform:none}}
 .split-title .ch{display:inline-block;opacity:0;transform:translateY(.45em) rotate(4deg);animation:ch-in .8s cubic-bezier(.2,.75,.2,1) forwards}
 @keyframes ch-in{to{opacity:1;transform:none}}
+.nav-arrival .reveal,.nav-arrival .split-title .ch{opacity:1;transform:none;animation:none}
+.nav-arrival .pane{animation:none!important}
 @media(prefers-reduced-motion:reduce){.reveal,.split-title .ch{opacity:1;transform:none;animation:none}::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}}
 
 /* Home stage: the building specimen */

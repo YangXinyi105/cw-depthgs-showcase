@@ -1,5 +1,9 @@
 // Shared page behaviour: quick search jump, local service status, title reveal and number count-up.
 (() => {
+  try {
+    const navigation = performance.getEntriesByType('navigation')[0];
+    if (navigation?.type === 'navigate' && document.referrer && new URL(document.referrer).origin === location.origin) document.documentElement.classList.add('nav-arrival');
+  } catch {}
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const routes = [
     [/首页|总览|主页|home|overview/i, 'index.html'],
