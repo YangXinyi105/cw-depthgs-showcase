@@ -81,5 +81,5 @@ python -m http.server 8765 --bind 127.0.0.1
 - `assets/cases/`：公开演示图像与来源清单。
 - `review.html` / `review.js` / `review.css`：人工复核页（视角卡片、并排标注与滑块对比），标注功能由 `workspace.js` 提供。
 - `research.html` / `styles.css` / `research.js`：研究展示。
-- `assets/technical-report-20261027.pdf`：2026-10-27 Web应用版技术报告，补充建档流程、系统架构、权限、部署与软件验收。
-- `assets/technical-report.pdf`：同一新版报告的兼容入口。
+- `assets/technical-report-20261027.pdf`：当前复赛技术报告的兼容文件名，内容已同步为最新修订版。
+- `assets/technical-report.pdf`：网站“技术报告 PDF”入口，内容为最新修订版。
